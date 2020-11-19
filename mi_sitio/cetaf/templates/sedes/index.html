@@ -1,0 +1,24 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Sedes{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="uk-card uk-card-secondary uk-card-body uk-align-center">
+        <h3 class="uk-card-title" style="font-family:Piazzolla">SEDES</h3>
+        {% block contenido_sede %}
+            <ul class="uk-nav-default uk-nav-parent-icon uk-padding" uk-nav>
+                <li class="uk-button uk-button-danger"><a href="{% url 'crear_sede' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
+                <br>
+                <br>
+            </ul>
+            <ul class="uk-list uk-list-circle uk-list-divider">
+                {% for sede in lista_sedes %}
+                    <li><a class="uk-link-text" href="{% url 'detalle_sede' sede.id %}" uk-toggle>{{sede.nombre}}</a></li>
+                {% endfor %}
+            </ul>
+        {% endblock contenido_sede %}
+    </div>
+</div>
+{% endblock %}

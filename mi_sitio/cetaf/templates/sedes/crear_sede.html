@@ -1,0 +1,16 @@
+{% extends "sedes/index.html" %}
+
+{% block titulo %}Crear{% endblock %}
+
+{% block contenido_sede %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="uk-button uk-button-danger" type="submit">Guardar</button>
+</form>
+<br>
+<br>
+<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+    <li class="uk-button uk-button-text"><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+</ul>
+{% endblock contenido_sede %}

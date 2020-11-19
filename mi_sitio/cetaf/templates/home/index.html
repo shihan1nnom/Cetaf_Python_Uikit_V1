@@ -1,0 +1,62 @@
+<!doctype html>
+{% load static %}
+<html lang="en" style="background:url({% static 'contenido/imagenes/fondo_64.jpg' %});
+                        background-size: cover; background-attachment: fixed; background-repeat: no-repeat;">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=0.8">
+
+        <!-- CSS y Scripts -->
+        <link rel="stylesheet" href="{% static 'contenido/uikit/uikit.min.css' %}">
+        <link rel="stylesheet" href="{% static 'contenido/estilo.css' %}">
+        <script src="{% static 'plugins/uikit/uikit.min.js' %}"></script>
+        <script src="{% static 'plugins/uikit/uikit-icons.min.js' %}"></script>
+        <script src="{% static 'plugins/jquery/jquery-3.5.1.min.js' %}"></script>
+
+        <title>
+            {% block titulo %} Inicio | Cetaf {% endblock %}
+        </title>
+    </head>
+
+    <body>
+        <div class="uk-panel uk-padding uk-panel-transparent uk-light">
+            <button class="uk-icon-link" type="button" uk-toggle="target: #menu-lateral" uk-icon="icon: menu">Menu </button>
+        </div>
+        <div id="menu-lateral" uk-offcanvas="overlay: true; mode: reveal">
+            <div class="uk-dark uk-offcanvas-bar" style="background:grey; opacity:0.8">
+                <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                    <div class="uk-text-center">
+                        <a href="{% url 'index' %}"><img src="{% static 'contenido/imagenes/logo_2.png' %}" alt="avatar" width="300px"></a>
+                    </div>
+                    <li class="uk-nav-divider"></li>
+                    <li><a href="{% url 'acercade' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> ¿Que es CETAF?</a></li>
+                    <li class="uk-nav-header" style="margin-top:60px">TABLERO DE CONTROL</li>
+                    <li><a href="{% url 'lts_usuarios' %}"><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuarios</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: nut"></span> Activos</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: users"></span> Tipo Usuarios</a></li>
+                    <li><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span> Sedes</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: home"></span> Ambientes</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: database"></span> Consultas</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
+                    <li class="uk-nav-divider" style="margin-top:100px"></li>
+                    <li class="uk-active"><a><span>Email:</span></a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
+                    <li class="uk-nav-divider" style="margin-top:20px"></li>
+                    <li><a href="{% url 'ayuda' %}"><span class="uk-margin-small-right" uk-icon="icon: info"></span> Ayuda</a></li>
+              </ul>
+            </div>
+        </div>
+        <div class="uk-container uk-container-expand uk-overflow-auto uk-background-default uk-padding uk-dark" style="opacity:0.6; height:680px">
+            {% block contenido %}
+                <img class="uk-align-center uk-responsive-width" src="{% static 'contenido/imagenes/logo_2.png' %}" alt="avatar" width="900px">
+            {% endblock %}
+        </div>
+        <footer class="uk-padding" style="text-align:center; color:white;">
+            <span>CETAF 2020 | Creado por Shihan</span>
+        </footer>
+    </body>
+</html>
