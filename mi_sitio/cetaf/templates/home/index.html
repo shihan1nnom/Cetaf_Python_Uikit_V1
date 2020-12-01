@@ -5,7 +5,7 @@
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=0.8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- CSS y Scripts -->
         <link rel="stylesheet" href="{% static 'contenido/uikit/uikit.min.css' %}">
@@ -19,12 +19,18 @@
         </title>
     </head>
 
+    <style>
+        body{
+            font-family: 'Inconsolata', monospace;
+        }
+    </style>
+
     <body>
         <div class="uk-panel uk-padding uk-panel-transparent uk-light">
             <button class="uk-icon-link" type="button" uk-toggle="target: #menu-lateral" uk-icon="icon: menu">Menu </button>
         </div>
         <div id="menu-lateral" uk-offcanvas="overlay: true; mode: reveal">
-            <div class="uk-dark uk-offcanvas-bar" style="background:grey; opacity:0.8">
+            <div class="uk-dark uk-offcanvas-bar" style="background:black;">
                 <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
                     <div class="uk-text-center">
                         <a href="{% url 'index' %}"><img src="{% static 'contenido/imagenes/logo_2.png' %}" alt="avatar" width="300px"></a>
@@ -50,7 +56,7 @@
               </ul>
             </div>
         </div>
-        <div class="uk-container uk-container-expand uk-overflow-auto uk-background-default uk-padding uk-dark" style="opacity:0.6; height:680px">
+        <div class="uk-container uk-container-expand uk-overflow-auto uk-background-default uk-padding-small uk-dark" style="opacity:1; height:730px">
             {% block contenido %}
                 <img class="uk-align-center uk-responsive-width" src="{% static 'contenido/imagenes/logo_2.png' %}" alt="avatar" width="900px">
             {% endblock %}

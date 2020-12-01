@@ -4,21 +4,34 @@
 {% block titulo %}Sedes{% endblock %}
 
 {% block contenido %}
-<div class="container">
-    <div class="uk-card uk-card-secondary uk-card-body uk-align-center">
-        <h3 class="uk-card-title" style="font-family:Piazzolla">SEDES</h3>
-        {% block contenido_sede %}
-            <ul class="uk-nav-default uk-nav-parent-icon uk-padding" uk-nav>
-                <li class="uk-button uk-button-danger"><a href="{% url 'crear_sede' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
-                <br>
-                <br>
-            </ul>
-            <ul class="uk-list uk-list-circle uk-list-divider">
-                {% for sede in lista_sedes %}
-                    <li><a class="uk-link-text" href="{% url 'detalle_sede' sede.id %}" uk-toggle>{{sede.nombre}}</a></li>
-                {% endfor %}
-            </ul>
-        {% endblock contenido_sede %}
-    </div>
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small">
+    <h3 class="uk-card-title">SEDES</h3>
+    {% block contenido_sede %}
+        <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+            <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge"><a class="uk-text-danger" href="{% url 'crear_sede' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
+        </ul>
+        <ul class="uk-list uk-list-striped">
+            {% for sede in obj_pagina %}
+                <li><a href="{% url 'detalle_sede' sede.id %}" uk-toggle>|+| {{sede.nombre}}</a></li>
+            {% endfor %}
+        </ul>
+        <div>
+          <span>
+              {% if obj_pagina.has_previous %}
+                  <a href="?page=1">&laquo; Primera</a>
+                  <a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a>
+              {% endif %}
+
+              <span>
+                  Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.
+              </span>
+
+              {% if obj_pagina.has_next %}
+                  <a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a>
+                  <a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a>
+              {% endif %}
+          </span>
+        </div>
+    {% endblock contenido_sede %}
 </div>
 {% endblock %}
