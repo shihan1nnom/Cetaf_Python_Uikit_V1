@@ -1,5 +1,5 @@
 from django import forms
-from .models import Sede, Ambiente, Categoria, Activo
+from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 
 
 class SedeForm(forms.ModelForm):
@@ -73,4 +73,28 @@ class ActivoForm(forms.ModelForm):
             'descripcion': ('Descripcion:'),
             'vida_util': ('Vida util:'),
             'valor_residual': ('Valor residual:'),
+        }
+
+
+class AsignacionForm(forms.ModelForm):
+    class Meta:
+        model = Asignacion
+        fields = '__all__'
+        widgets = {
+            'nombre_activo': forms.Select(attrs={'class': 'uk-select'}),
+            'persona_responsable': forms.TextInput(attrs={'class': 'uk-input'}),
+            'sede_asignada': forms.Select(attrs={'class': 'uk-select'}),
+            'ambiente_asignado': forms.Select(attrs={'class': 'uk-select'}),
+            'fecha_inicio': forms.DateInput(attrs={'class': 'uk-input', 'placeholder': 'aaaa-mm-dd'}),
+            'fecha_fin': forms.DateInput(attrs={'class': 'uk-input', 'placeholder': 'aaaa-mm-dd'}),
+            'descripcion': forms.Textarea(attrs={'class': 'uk-textarea'}),
+        }
+        labels = {
+            'nombre_activo': ('Nombre del activo:'),
+            'persona_responsable': ('Persona responsable:'),
+            'sede_asignada': ('Sede asignada:'),
+            'ambiente_asignado': ('Ambiente asignado:'),
+            'fecha_inicio': ('Fecha de inicio:'),
+            'fecha_fin': ('Fecha fin:'),
+            'descripcion': ('Descripcion:'),
         }

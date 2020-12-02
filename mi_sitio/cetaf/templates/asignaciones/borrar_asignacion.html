@@ -1,0 +1,40 @@
+{% extends "asignaciones/index.html" %}
+
+{% block titulo %}Borrar{% endblock %}
+
+{% block contenido_asignacion %}
+<form class="uk-form-horizontal uk-margin-large" method="post">
+    {% csrf_token %}
+    <div class="uk-modal-body">
+        <dl>
+            <dt>Nombre del activo:</dt>
+            <dd>{{asignacion.nombre_activo}}</dd>
+            <br>
+            <dt>Persona responsable:</dt>
+            <dd>{{asignacion.persona_responsable}}</dd>
+            <br>
+            <dt>Sede asignada:</dt>
+            <dd>{{asignacion.sede_asignada}}</dd>
+            <br>
+            <dt>Ambiente asignado:</dt>
+            <dd>{{asignacion.ambiente_asignado}}</dd>
+            <br>
+            <dt>Fecha de inicio (Entregado):</dt>
+            <dd>{{asignacion.fecha_inicio}}</dd>
+            <br>
+            <dt>Fecha fin (Devolucion):</dt>
+            <dd>{{asignacion.fecha_fin}}</dd>
+            <br>
+            <dt>Descripcion:</dt>
+            <dd>{{asignacion.descripcion}}</dd>
+            <br>
+        </dl>
+    </div>
+    <span>¿Esta seguro que desea eliminar este registro?</span>
+    <hr>
+    <button class="uk-button uk-button-danger" type="submit">Eliminar</button>
+</form>
+<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+    <li class="uk-button uk-button-text"><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+</ul>
+{% endblock contenido_asignacion %}

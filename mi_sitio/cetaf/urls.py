@@ -32,4 +32,10 @@ urlpatterns = [
     path('activos/crear', views.crear_activo, name='crear_activo'),
     path('activos/<int:_id>/actualizar', views.actualizar_activo, name='actualizar_activo'),
     path('activos/<int:_id>/borrar', views.borrar_activo, name='borrar_activo'),
+
+    path('asignaciones/', views.lts_asignacion, name='lts_asignacion'),
+    path('asignaciones/<int:_id>/', views.detalle_asignacion, name='detalle_asignacion'),
+    path('asignaciones/crear', views.crear_asignacion, name='crear_asignacion'),
+    path('asignaciones/<int:_id>/actualizar', views.actualizar_asignacion, name='actualizar_asignacion'),
+    path('asignaciones/<int:_id>/borrar', views.borrar_asignacion, name='borrar_asignacion'),
 ]

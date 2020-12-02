@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.template import loader
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
-from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm
+from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm
 from django.core.paginator import Paginator
 from django.views.generic.edit import CreateView
 
@@ -211,7 +211,7 @@ def borrar_categoria(request, _id):
 
 
 #
-# CRUD de las Categorias
+# CRUD de los Activos
 #
 def lts_activo(request):
     lista = Activo.objects.all()
@@ -269,3 +269,64 @@ def borrar_activo(request, _id):
         return redirect('/activos')
     else:
         return render(request, 'activos/borrar_activo.html', {'activo': data})
+
+
+#
+# CRUD de las asignaciones
+#
+def lts_asignacion(request):
+    lista = Asignacion.objects.all()
+    paginador = Paginator(lista, 10)
+    num_pagina = request.GET.get('page')
+    obj_pagina = paginador.get_page(num_pagina)
+
+    return render(request, 'asignaciones/index.html', {'obj_pagina': obj_pagina})
+
+def crear_asignacion(request):
+    if request.method == 'POST':
+        form = AsignacionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/asignaciones')
+    else:
+        form = AsignacionForm()
+        contexto = {
+            'form': form
+        }
+        return render(request, 'asignaciones/crear_asignacion.html', contexto)
+
+def detalle_asignacion(request, _id):
+    try:
+        asignacion = Asignacion.objects.get(pk = _id)
+    except Asignacion.DoesNotExist:
+        raise Http404('Este registro no existe')
+
+    return render(request, 'asignaciones/detalle_asignacion.html', {'asignacion': asignacion})
+
+def actualizar_asignacion(request, _id):
+    try:
+        dato_old = get_object_or_404(Asignacion, id = _id)
+    except Exception:
+        raise Http404('El registro no existe')
+    if request.method == 'POST':
+        form = AsignacionForm(request.POST, instance=dato_old)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/asignaciones/{_id}/')
+    else:
+        form = AsignacionForm(instance=dato_old)
+        contexto = {
+            'form': form
+        }
+        return render(request, 'asignaciones/actualizar_asignacion.html', contexto)
+
+def borrar_asignacion(request, _id):
+    try:
+        data = get_object_or_404(Asignacion, id = _id)
+    except Exception:
+        raise Http404('El registro no existe')
+    if request.method == 'POST':
+        data.delete()
+        return redirect('/asignaciones')
+    else:
+        return render(request, 'asignaciones/borrar_asignacion.html', {'asignacion': data})
