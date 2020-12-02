@@ -1,0 +1,22 @@
+{% extends "sedes/index.html" %}
+
+{% block titulo %}Actualizar{% endblock %}
+
+{% block contenido_sede %}
+<form class="uk-form-horizontal uk-margin-large" method="post">
+    {% csrf_token %}
+    {% for campo in form %}
+        <div class="uk-margin">
+            <label class="uk-form-label" for="{{campo.auto_id}}">{{campo.label}}</label>
+            <div class="uk-form-controls">
+                {{campo}}
+            </div>
+        </div>
+    {% endfor %}
+    <button class="uk-button uk-button-danger" type="submit">Actualizar</button>
+</form>
+
+<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+    <li class="uk-button uk-button-text"><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+</ul>
+{% endblock contenido_sede %}

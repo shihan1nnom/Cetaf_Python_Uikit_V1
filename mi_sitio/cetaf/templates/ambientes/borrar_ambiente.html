@@ -1,0 +1,26 @@
+{% extends "ambientes/index.html" %}
+
+{% block titulo %}Actualizar{% endblock %}
+
+{% block contenido_ambiente %}
+<form class="uk-form-horizontal uk-margin-large" method="post">
+    {% csrf_token %}
+    <div class="uk-modal-body">
+        <dl>
+            <dt>Nombre del ambiente:</dt>
+            <dd>{{ambiente.nombre}}</dd>
+            <br>
+            <dt>Descripcion:</dt>
+            <dd>{{ambiente.descripcion}}</dd>
+            <br>
+            <dt></dt>
+        </dl>
+    </div>
+    <span>¿Esta seguro que desea eliminar este registro?</span>
+    <hr>
+    <button class="uk-button uk-button-danger" type="submit">Eliminar</button>
+</form>
+<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+    <li class="uk-button uk-button-text"><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+</ul>
+{% endblock contenido_ambiente %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Sede
+from .models import Sede, Ambiente
 
 
 class SedeForm(forms.ModelForm):
@@ -13,4 +13,18 @@ class SedeForm(forms.ModelForm):
         labels = {
             'nombre': ('Nombre de la sede:'),
             'ciudad': ('Ciudad:'),
+        }
+
+
+class AmbienteForm(forms.ModelForm):
+    class Meta:
+        model = Ambiente
+        fields = '__all__'
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'uk-input'}),
+            'descripcion': forms.Textarea(attrs={'class': 'uk-textarea'}),
+        }
+        labels = {
+            'nombre': ('Nombre del ambiente:'),
+            'descripcion': ('Descripcion:'),
         }

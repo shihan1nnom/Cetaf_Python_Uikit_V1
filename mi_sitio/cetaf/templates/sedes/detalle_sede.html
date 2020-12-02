@@ -9,16 +9,16 @@
     </div>
     <div class="uk-modal-body">
         <dl>
-            <dt>Nombre sede:</dt>
+            <dt>Nombre de la sede:</dt>
             <dd>{{sede.nombre}}</dd>
             <br>
             <dt>Ciudad:</dt>
             <dd>{{sede.ciudad}}</dd>
             <br>
             <dt></dt>
-            <dd style="float: right;">
-                <a href="" uk-icon="file-edit" uk-tooltip="Editar"></a>
-                <a href="" uk-icon="trash" uk-tooltip="Eliminar"></a>
+            <dd style="margin-bottom: 20px">
+                <a class="uk-button uk-button-default" href="{% url 'actualizar_sede' sede.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
+                <a class="uk-button uk-button-default" href="{% url 'borrar_sede' sede.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>
             </dd>
             <ul class="uk-nav-default uk-nav-parent-icon"  uk-nav>
                 <li class="uk-button uk-button-default uk-button-small" style="background: black;"><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>

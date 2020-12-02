@@ -1,0 +1,29 @@
+{% extends "ambientes/index.html" %}
+
+{% block titulo %}Detalle{% endblock %}
+
+{% block contenido_ambiente %}
+
+    <div class="uk-modal-header" style="color: black; text-align: center;">
+        {{ambiente.nombre}}
+    </div>
+    <div class="uk-modal-body">
+        <dl>
+            <dt>Nombre del ambiente:</dt>
+            <dd>{{ambiente.nombre}}</dd>
+            <br>
+            <dt>Descripcion:</dt>
+            <dd>{{ambiente.descripcion}}</dd>
+            <br>
+            <dt></dt>
+            <dd style="margin-bottom: 20px">
+                <a class="uk-button uk-button-default" href="{% url 'actualizar_ambiente' ambiente.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
+                <a class="uk-button uk-button-default" href="{% url 'borrar_ambiente' ambiente.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>
+            </dd>
+            <ul class="uk-nav-default uk-nav-parent-icon"  uk-nav>
+                <li class="uk-button uk-button-default uk-button-small" style="background: black;"><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+            </ul>
+        </dl>
+    </div>
+
+{% endblock contenido_ambiente %}
