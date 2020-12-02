@@ -1,0 +1,37 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Categorias{% endblock %}
+
+{% block contenido %}
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small">
+    <h3 class="uk-card-title">Categorias</h3>
+    {% block contenido_categoria %}
+        <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+            <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge"><a class="uk-text-danger" href="{% url 'crear_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
+        </ul>
+        <ul class="uk-list uk-list-striped">
+            {% for categoria in obj_pagina %}
+                <li><a href="{% url 'detalle_categoria' categoria.id %}" uk-toggle>|+| {{categoria.nombre}}</a></li>
+            {% endfor %}
+        </ul>
+        <div>
+          <span>
+              {% if obj_pagina.has_previous %}
+                  <a href="?page=1">&laquo; Primera</a>
+                  <a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a>
+              {% endif %}
+
+              <span>
+                  Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.
+              </span>
+
+              {% if obj_pagina.has_next %}
+                  <a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a>
+                  <a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a>
+              {% endif %}
+          </span>
+        </div>
+    {% endblock contenido_categoria %}
+</div>
+{% endblock %}

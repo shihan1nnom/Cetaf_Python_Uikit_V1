@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.template import loader
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
-from .forms import SedeForm, AmbienteForm
+from .forms import SedeForm, AmbienteForm, CategoriaForm
 from django.core.paginator import Paginator
 from django.views.generic.edit import CreateView
 
@@ -147,3 +147,64 @@ def borrar_ambiente(request, _id):
         return redirect('/ambientes')
     else:
         return render(request, 'ambientes/borrar_ambiente.html', {'ambiente': data})
+
+
+#
+# CRUD de las Categorias
+#
+def lts_categoria(request):
+    lista = Categoria.objects.all()
+    paginador = Paginator(lista, 10)
+    num_pagina = request.GET.get('page')
+    obj_pagina = paginador.get_page(num_pagina)
+
+    return render(request, 'categorias/index.html', {'obj_pagina': obj_pagina})
+
+def crear_categoria(request):
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/categorias')
+    else:
+        form = CategoriaForm()
+        contexto = {
+            'form': form
+        }
+        return render(request, 'categorias/crear_categoria.html', contexto)
+
+def detalle_categoria(request, _id):
+    try:
+        categoria = Categoria.objects.get(pk = _id)
+    except Categoria.DoesNotExist:
+        raise Http404('Este registro no existe')
+
+    return render(request, 'categorias/detalle_categoria.html', {'categoria': categoria})
+
+def actualizar_categoria(request, _id):
+    try:
+        dato_old = get_object_or_404(Categoria, id = _id)
+    except Exception:
+        raise Http404('El registro no existe')
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST, instance=dato_old)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/categorias/{_id}/')
+    else:
+        form = CategoriaForm(instance=dato_old)
+        contexto = {
+            'form': form
+        }
+        return render(request, 'categorias/actualizar_categoria.html', contexto)
+
+def borrar_categoria(request, _id):
+    try:
+        data = get_object_or_404(Categoria, id = _id)
+    except Exception:
+        raise Http404('El registro no existe')
+    if request.method == 'POST':
+        data.delete()
+        return redirect('/categorias')
+    else:
+        return render(request, 'categorias/borrar_categoria.html', {'categoria': data})

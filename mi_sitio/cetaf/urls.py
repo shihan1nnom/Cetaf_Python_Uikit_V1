@@ -20,4 +20,10 @@ urlpatterns = [
     path('ambientes/crear', views.crear_ambiente, name='crear_ambiente'),
     path('ambientes/<int:_id>/actualizar', views.actualizar_ambiente, name='actualizar_ambiente'),
     path('ambientes/<int:_id>/borrar', views.borrar_ambiente, name='borrar_ambiente'),
+
+    path('categorias/', views.lts_categoria, name='lts_categoria'),
+    path('categorias/<int:_id>/', views.detalle_categoria, name='detalle_categoria'),
+    path('categorias/crear', views.crear_categoria, name='crear_categoria'),
+    path('categorias/<int:_id>/actualizar', views.actualizar_categoria, name='actualizar_categoria'),
+    path('categorias/<int:_id>/borrar', views.borrar_categoria, name='borrar_categoria'),
 ]
