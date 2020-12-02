@@ -26,4 +26,10 @@ urlpatterns = [
     path('categorias/crear', views.crear_categoria, name='crear_categoria'),
     path('categorias/<int:_id>/actualizar', views.actualizar_categoria, name='actualizar_categoria'),
     path('categorias/<int:_id>/borrar', views.borrar_categoria, name='borrar_categoria'),
+
+    path('activos/', views.lts_activo, name='lts_activo'),
+    path('activos/<int:_id>/', views.detalle_activo, name='detalle_activo'),
+    path('activos/crear', views.crear_activo, name='crear_activo'),
+    path('activos/<int:_id>/actualizar', views.actualizar_activo, name='actualizar_activo'),
+    path('activos/<int:_id>/borrar', views.borrar_activo, name='borrar_activo'),
 ]

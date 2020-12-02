@@ -1,0 +1,55 @@
+{% extends "activos/index.html" %}
+
+{% block titulo %}Detalle{% endblock %}
+
+{% block contenido_activo %}
+
+    <div class="uk-modal-header" style="color: black; text-align: center;">
+        {{activo.nombre}}
+    </div>
+    <div class="uk-modal-body">
+        <dl>
+            <dt>Nombre del activo:</dt>
+            <dd>{{activo.nombre}}</dd>
+            <br>
+            <dt>Categoria:</dt>
+            <dd>{{activo.categoria}}</dd>
+            <br>
+            <dt>Numero de serie:</dt>
+            <dd>{{activo.num_serie}}</dd>
+            <br>
+            <dt>Fecha de compra:</dt>
+            <dd>{{activo.fecha_compra}}</dd>
+            <br>
+            <dt>Cobertura de seguro:</dt>
+            <dd>{{activo.cobertura_seguro}}</dd>
+            <br>
+            <dt>Valor de compra:</dt>
+            <dd>$ {{activo.valor_compra}}</dd>
+            <br>
+            <dt>Garantia:</dt>
+            <dd>{{activo.garantia}}</dd>
+            <br>
+            <dt>Fecha puesto en servicio:</dt>
+            <dd>{{activo.fecha_puesto_servicio}}</dd>
+            <br>
+            <dt>Descripcion:</dt>
+            <dd>{{activo.descripcion}}</dd>
+            <br>
+            <dt>Vida util:</dt>
+            <dd>{{activo.vida_util}}</dd>
+            <br>
+            <dt>Valor residual:</dt>
+            <dd>$ {{activo.valor_residual}}</dd>
+            <br>
+            <dd style="margin-bottom: 20px">
+                <a class="uk-button uk-button-default" href="{% url 'actualizar_activo' activo.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
+                <a class="uk-button uk-button-default" href="{% url 'borrar_activo' activo.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>
+            </dd>
+            <ul class="uk-nav-default uk-nav-parent-icon"  uk-nav>
+                <li class="uk-button uk-button-default uk-button-small" style="background: black;"><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
+            </ul>
+        </dl>
+    </div>
+
+{% endblock contenido_activo %}
