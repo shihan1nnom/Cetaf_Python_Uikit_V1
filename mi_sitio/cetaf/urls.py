@@ -38,4 +38,7 @@ urlpatterns = [
     path('asignaciones/crear', views.crear_asignacion, name='crear_asignacion'),
     path('asignaciones/<int:_id>/actualizar', views.actualizar_asignacion, name='actualizar_asignacion'),
     path('asignaciones/<int:_id>/borrar', views.borrar_asignacion, name='borrar_asignacion'),
+
+    path('login/', views.iniciar_sesion, name="login"),
+    path('logout', views.cerrar_sesion, name='logout'),
 ]

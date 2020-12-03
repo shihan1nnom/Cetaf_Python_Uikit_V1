@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
-from django.template import loader
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm
 from django.core.paginator import Paginator
-from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 #
 # Vistas Home
 #
+
 def index(request):
     return render(request, 'home/index.html')
 
@@ -23,6 +26,7 @@ def ayuda(request):
 #
 # CRUD de Usuarios
 #
+@login_required(login_url="login")
 def lts_usuarios(request):
     return render(request, 'usuarios/index.html')
 
@@ -30,6 +34,7 @@ def lts_usuarios(request):
 #
 # CRUD de las Sedes
 #
+@login_required(login_url="login")
 def lts_sedes(request):
     lista = Sede.objects.all()
     paginador = Paginator(lista, 10)
@@ -91,6 +96,7 @@ def borrar_sede(request, _id):
 #
 # CRUD de las Ambientes
 #
+@login_required(login_url="login")
 def lts_ambiente(request):
     lista = Ambiente.objects.all()
     paginador = Paginator(lista, 10)
@@ -152,6 +158,7 @@ def borrar_ambiente(request, _id):
 #
 # CRUD de las Categorias
 #
+@login_required(login_url="login")
 def lts_categoria(request):
     lista = Categoria.objects.all()
     paginador = Paginator(lista, 10)
@@ -213,6 +220,7 @@ def borrar_categoria(request, _id):
 #
 # CRUD de los Activos
 #
+@login_required(login_url="login")
 def lts_activo(request):
     lista = Activo.objects.all()
     paginador = Paginator(lista, 10)
@@ -274,6 +282,7 @@ def borrar_activo(request, _id):
 #
 # CRUD de las asignaciones
 #
+@login_required(login_url="login")
 def lts_asignacion(request):
     lista = Asignacion.objects.all()
     paginador = Paginator(lista, 10)
@@ -330,3 +339,26 @@ def borrar_asignacion(request, _id):
         return redirect('/asignaciones')
     else:
         return render(request, 'asignaciones/borrar_asignacion.html', {'asignacion': data})
+
+
+#
+# Login
+#
+def iniciar_sesion(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            return redirect('login/')
+    form = AuthenticationForm()
+    return render(request, 'auth/login.html', {'form': form})
+
+
+def cerrar_sesion(request):
+    logout(request)
+    messages.info(request, 'Saliendo del sistema')
+    return redirect('login/')
