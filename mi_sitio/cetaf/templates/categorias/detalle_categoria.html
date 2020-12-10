@@ -5,17 +5,22 @@
 {% block contenido_categoria %}
 
     <div class="uk-modal-header" style="color: black; text-align: center;">
-        {{categoria.nombre}}
+        <h3 class="uk-text-bold">Nombre de la categoria: [{{categoria.nombre}}]</h3>
     </div>
     <div class="uk-modal-body">
         <dl>
-            <dt>Nombre del categoria:</dt>
-            <dd>{{categoria.nombre}}</dd>
-            <br>
-            <dt>Descripcion:</dt>
-            <dd>{{categoria.descripcion}}</dd>
-            <br>
-            <dt></dt>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Nombre del categoria:</dt>
+                    <dd>{{categoria.nombre}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Descripcion:</dt>
+                    <dd>{{categoria.descripcion}}</dd>
+                    <br>
+                </div>
+            </div>
             <dd style="margin-bottom: 20px">
                 <a class="uk-button uk-button-default" href="{% url 'actualizar_categoria' categoria.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
                 <a class="uk-button uk-button-default" href="{% url 'borrar_categoria' categoria.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>

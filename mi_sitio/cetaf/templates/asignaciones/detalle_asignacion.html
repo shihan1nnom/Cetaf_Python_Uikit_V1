@@ -5,31 +5,59 @@
 {% block contenido_asignacion %}
 
     <div class="uk-modal-header" style="color: black; text-align: center;">
-        {{asignacion.nombre_activo}}
+        <h3 class="uk-text-bold">Nombre del activo: [{{asignacion.nombre_activo}}]</h3>
     </div>
     <div class="uk-modal-body">
         <dl>
-            <dt>Nombre del activo:</dt>
-            <dd>{{asignacion.nombre_activo}}</dd>
-            <br>
-            <dt>Persona responsable:</dt>
-            <dd>{{asignacion.persona_responsable}}</dd>
-            <br>
-            <dt>Sede asignada:</dt>
-            <dd>{{asignacion.sede_asignada}}</dd>
-            <br>
-            <dt>Ambiente asignado:</dt>
-            <dd>{{asignacion.ambiente_asignado}}</dd>
-            <br>
-            <dt>Fecha de inicio (Entregado):</dt>
-            <dd>{{asignacion.fecha_inicio}}</dd>
-            <br>
-            <dt>Fecha fin (Devolucion):</dt>
-            <dd>{{asignacion.fecha_fin}}</dd>
-            <br>
-            <dt>Descripcion:</dt>
-            <dd>{{asignacion.descripcion}}</dd>
-            <br>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Nombre del activo:</dt>
+                    <dd>{{asignacion.nombre_activo}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Persona responsable:</dt>
+                    <dd>{{asignacion.persona_responsable}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Sede asignada:</dt>
+                    <dd>{{asignacion.sede_asignada}}</dd>
+                    <br>
+                </div>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Ambiente asignado:</dt>
+                    <dd>{{asignacion.ambiente_asignado}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Fecha de inicio (Entregado):</dt>
+                    <dd>{{asignacion.fecha_inicio}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Fecha fin (Devolucion):</dt>
+                    <dd>{{asignacion.fecha_fin}}</dd>
+                    <br>
+                </div>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Descripcion:</dt>
+                    <dd>{{asignacion.descripcion}}</dd>
+                    <br>
+                </div>
+                <div>
+                
+                </div>
+            </div>
+           
+            
+            
+           
+            
             <dd style="margin-bottom: 20px">
                 <a class="uk-button uk-button-default" href="{% url 'actualizar_asignacion' asignacion.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
                 <a class="uk-button uk-button-default" href="{% url 'borrar_asignacion' asignacion.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>

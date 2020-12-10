@@ -5,16 +5,22 @@
 {% block contenido_sede %}
     
     <div class="uk-modal-header" style="color: black; text-align: center;">
-        {{sede.nombre}}
+        <h3 class="uk-text-bold">Nombre de la sede: [{{sede.nombre}}]</h3>
     </div>
     <div class="uk-modal-body">
         <dl>
-            <dt>Nombre de la sede:</dt>
-            <dd>{{sede.nombre}}</dd>
-            <br>
-            <dt>Ciudad:</dt>
-            <dd>{{sede.ciudad}}</dd>
-            <br>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Nombre de la sede:</dt>
+                    <dd>{{sede.nombre}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Ciudad:</dt>
+                    <dd>{{sede.ciudad}}</dd>
+                    <br>
+                </div>
+            </div>
             <dt></dt>
             <dd style="margin-bottom: 20px">
                 <a class="uk-button uk-button-default" href="{% url 'actualizar_sede' sede.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>

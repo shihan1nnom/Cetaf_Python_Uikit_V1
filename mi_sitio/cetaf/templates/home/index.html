@@ -1,7 +1,6 @@
 <!doctype html>
 {% load static %}
-<html lang="en" style="background:url({% static 'contenido/imagenes/fondo_64.jpg' %});
-                        background-size: cover; background-attachment: fixed; background-repeat: no-repeat;">
+<html lang="en">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -22,6 +21,9 @@
     <style>
         body{
             font-family: 'Inconsolata', monospace;
+            background:url("{% static 'contenido/imagenes/fondo_64.jpg' %}");
+            background-size: cover;
+            background-attachment: fixed;
         }
     </style>
 

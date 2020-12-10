@@ -5,7 +5,7 @@
 
 {% block contenido %}
 <div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small">
-    <h3 class="uk-card-title">Activos</h3>
+    <h3 class="uk-card-title uk-text-bold">ACTIVOS</h3>
     {% block contenido_activo %}
         <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
             <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge"><a class="uk-text-danger" href="{% url 'crear_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
@@ -17,19 +17,21 @@
         </ul>
         <div>
           <span>
-              {% if obj_pagina.has_previous %}
-                  <a href="?page=1">&laquo; Primera</a>
-                  <a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a>
-              {% endif %}
+              <ul class="uk-pagination uk-flex-center" uk-margin>
+                  {% if obj_pagina.has_previous %}
+                  <li><a href="?page=1">&laquo; Primera</a></li>
+                  <li><a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a></li>
+                  {% endif %}
 
-              <span>
-                  Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.
-              </span>
+                  <span>
+                      <li class="uk-disabled"><span>Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.</span></li>
+                  </span>
 
-              {% if obj_pagina.has_next %}
-                  <a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a>
-                  <a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a>
-              {% endif %}
+                  {% if obj_pagina.has_next %}
+                      <li><a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a></li>
+                      <li><a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a></li>
+                  {% endif %}
+              </ul>
           </span>
         </div>
     {% endblock contenido_activo %}

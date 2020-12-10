@@ -5,43 +5,76 @@
 {% block contenido_activo %}
 
     <div class="uk-modal-header" style="color: black; text-align: center;">
-        {{activo.nombre}}
+        <h3 class="uk-text-bold">Nombre del activo: [{{activo.nombre}}]</h3>
     </div>
     <div class="uk-modal-body">
         <dl>
-            <dt>Nombre del activo:</dt>
-            <dd>{{activo.nombre}}</dd>
-            <br>
-            <dt>Categoria:</dt>
-            <dd>{{activo.categoria}}</dd>
-            <br>
-            <dt>Numero de serie:</dt>
-            <dd>{{activo.num_serie}}</dd>
-            <br>
-            <dt>Fecha de compra:</dt>
-            <dd>{{activo.fecha_compra}}</dd>
-            <br>
-            <dt>Cobertura de seguro:</dt>
-            <dd>{{activo.cobertura_seguro}}</dd>
-            <br>
-            <dt>Valor de compra:</dt>
-            <dd>$ {{activo.valor_compra}}</dd>
-            <br>
-            <dt>Garantia:</dt>
-            <dd>{{activo.garantia}}</dd>
-            <br>
-            <dt>Fecha puesto en servicio:</dt>
-            <dd>{{activo.fecha_puesto_servicio}}</dd>
-            <br>
-            <dt>Descripcion:</dt>
-            <dd>{{activo.descripcion}}</dd>
-            <br>
-            <dt>Vida util:</dt>
-            <dd>{{activo.vida_util}}</dd>
-            <br>
-            <dt>Valor residual:</dt>
-            <dd>$ {{activo.valor_residual}}</dd>
-            <br>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Nombre del activo:</dt>
+                    <dd>{{activo.nombre}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Categoria:</dt>
+                    <dd>{{activo.categoria}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Numero de serie:</dt>
+                    <dd>{{activo.num_serie}}</dd>
+                    <br>
+                </div>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Fecha de compra:</dt>
+                    <dd>{{activo.fecha_compra}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Cobertura de seguro:</dt>
+                    <dd>{{activo.cobertura_seguro}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Valor de compra:</dt>
+                    <dd>$ {{activo.valor_compra}}</dd>
+                    <br>
+                </div>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Garantia:</dt>
+                    <dd>{{activo.garantia}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Fecha puesto en servicio:</dt>
+                    <dd>{{activo.fecha_puesto_servicio}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Descripcion:</dt>
+                    <dd>{{activo.descripcion}}</dd>
+                    <br>
+                </div>
+            </div>
+            <div class="uk-child-width-expand@s" uk-grid>
+                <div>
+                    <dt>Vida util:</dt>
+                    <dd>{{activo.vida_util}}</dd>
+                    <br>
+                </div>
+                <div>
+                    <dt>Valor residual:</dt>
+                    <dd>$ {{activo.valor_residual}}</dd>
+                    <br>
+                </div>
+                <div>
+                    
+                </div>
+            </div>
             <dd style="margin-bottom: 20px">
                 <a class="uk-button uk-button-default" href="{% url 'actualizar_activo' activo.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
                 <a class="uk-button uk-button-default" href="{% url 'borrar_activo' activo.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>
