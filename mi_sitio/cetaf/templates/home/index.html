@@ -25,17 +25,23 @@
             background-size: cover;
             background-attachment: fixed;
         }
+        div.sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+        }
+        </style>
     </style>
 
     <body>
-        <div class="uk-panel uk-padding uk-panel-transparent uk-light">
+        <div class="uk-panel uk-padding uk-background-default uk-dark sticky">
             <button class="uk-icon-link" type="button" uk-toggle="target: #menu-lateral" uk-icon="icon: menu">Menu </button>
             <span class="uk-float-right">
                 Hola,
                 {{user.username}}
             </span>
         </div>
-        <div id="menu-lateral" uk-offcanvas="overlay: true; mode: reveal">
+        <div id="menu-lateral" uk-offcanvas="overlay: true; mode: reveal; container: contenido;">
             <div class="uk-dark uk-offcanvas-bar" style="background:black;">
                 <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
                     <div class="uk-text-center">
@@ -62,7 +68,7 @@
               </ul>
             </div>
         </div>
-        <div class="uk-container uk-container-expand uk-overflow-auto uk-background-default uk-padding-small uk-dark" style="opacity:1; height:730px">
+        <div id="contenido" class="uk-container uk-container-expand uk-overflow-auto uk-background-default uk-padding-small uk-dark" style="opacity:1; height:730px">
             {% block contenido %}
                 <img class="uk-align-center uk-responsive-width" src="{% static 'contenido/imagenes/logo_2.png' %}" alt="avatar" width="900px">
             {% endblock %}
