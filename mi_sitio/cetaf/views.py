@@ -351,9 +351,10 @@ def iniciar_sesion(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect('index')
         else:
-            return redirect('login/')
+            messages.info(request, 'Error en credenciales')
+            return redirect('login')
     form = AuthenticationForm()
     return render(request, 'auth/login.html', {'form': form})
 
