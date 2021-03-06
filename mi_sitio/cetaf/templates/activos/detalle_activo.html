@@ -79,10 +79,7 @@
                 <a class="uk-button uk-button-default" href="{% url 'actualizar_activo' activo.id %}" uk-icon="file-edit" uk-tooltip="Editar"></a>
                 <a class="uk-button uk-button-default" href="{% url 'borrar_activo' activo.id %}" uk-icon="trash" uk-tooltip="Eliminar"></a>
             </dd>
-            <ul class="uk-nav-default uk-nav-parent-icon"  uk-nav>
-                <li class="uk-button uk-button-default uk-button-small" style="background: black;"><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
-            </ul>
         </dl>
     </div>
-
+    <a class="uk-button uk-button-secondary" href="{% url 'lts_activo' %}" style="border-radius: 30px 10px; width: 200px;">Regresar</a>
 {% endblock contenido_activo %}

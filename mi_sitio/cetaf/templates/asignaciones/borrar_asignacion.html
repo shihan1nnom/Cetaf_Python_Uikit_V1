@@ -32,9 +32,13 @@
     </div>
     <span>¿Esta seguro que desea eliminar este registro?</span>
     <hr>
-    <button class="uk-button uk-button-danger" type="submit">Eliminar</button>
+    <div uk-grid>
+        <div>
+            <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px">Eliminar</button>
+        </div>
+        <div>
+            <a class="uk-button uk-button-secondary" href="{% url 'lts_asignacion' %}" style="border-radius: 30px 10px; width: 200px;">Regresar</a>
+        </div>
+    </div>
 </form>
-<ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-    <li class="uk-button uk-button-text"><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: arrow-left"></span> Regresar</a></li>
-</ul>
 {% endblock contenido_asignacion %}

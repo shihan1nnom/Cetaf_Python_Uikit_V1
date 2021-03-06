@@ -4,11 +4,11 @@
 {% block titulo %}Ambientes{% endblock %}
 
 {% block contenido %}
-<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small">
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
     <h3 class="uk-card-title uk-text-bold">AMBIENTES</h3>
     {% block contenido_ambiente %}
         <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-            <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge"><a class="uk-text-danger" href="{% url 'crear_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
+            <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge" style="border-radius: 30px 10px; margin-left: 30px"><a class="uk-text-danger" href="{% url 'crear_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
         </ul>
         <ul class="uk-list uk-list-striped">
             {% for ambiente in obj_pagina %}
