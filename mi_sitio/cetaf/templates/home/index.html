@@ -18,22 +18,39 @@
         </title>
     </head>
 
-    <style>
-        html{
-            background:url("{% static 'contenido/imagenes/fondo_72.jpg' %}");
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        body{
-            font-family: 'Inconsolata', monospace;
-        }
-    </style>
-
     <body>
+        <div id="modal-full" class="uk-modal-full" uk-modal>
+            <div class="uk-modal-dialog uk-padding-large">
+                <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+                <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                    <div class="uk-text-center">
+                        <a href="{% url 'index' %}"><img src="{% static 'contenido/imagenes/logo_15.png' %}" alt="avatar" width="250px"></a>
+                    </div>
+                    <li class="uk-nav-divider"></li>
+                    <li><a href="{% url 'acercade' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> ¿Que es CETAF?</a></li>
+                    <li class="uk-nav-header" style="margin-top:20px">TABLERO DE CONTROL</li>
+                    <li><a href="{% url 'lts_usuarios' %}"><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuarios</a></li>
+                    <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
+                    <li><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: nut"></span> Activos</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: users"></span> Tipo Usuarios</a></li>
+                    <li><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span> Sedes</a></li>
+                    <li><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> Ambientes</a></li>
+                    <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: database"></span> Consultas</a></li>
+                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
+                    <li class="uk-nav-divider" style="margin-top:30px"></li>
+                    <li class="uk-active"><a><span>Email:</span></a></li>
+                    <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
+                    <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
+                    <li class="uk-nav-divider" style="margin-top:20px"></li>
+                    <li><a href="{% url 'ayuda' %}"><span class="uk-margin-small-right" uk-icon="icon: info"></span> Ayuda</a></li>
+              </ul>
+            </div>
+        </div>
         <div uk-grid>
             <div class="uk-width-expand@m">
-                <div class="uk-card uk-card-secondary uk-card-body" style="margin: 20px; margin-bottom: 0px; border-radius: 10px 30px">
-                    <button class="uk-icon-link" type="button" uk-toggle="target: #menu-lateral; animation: uk-animation-fade" uk-icon="icon: menu">Menu </button>
+                <div class="uk-card uk-card-default uk-card-body barra-superior">
+                    <a class="uk-icon-link uk-hidden@m" href="#modal-full" uk-icon="icon: menu" uk-toggle></a>
                     <span class="uk-float-right">
                         Hola,
                         {{user.username}}
@@ -42,12 +59,104 @@
             </div>
         </div>
         <div uk-grid>
-            <div class="uk-width-expand uk-visible@m">
-                <div class="uk-card uk-card-secondary uk-card-body" style="margin: 20px; border-radius: 10px 30px">1-3</div>
+            <div class="uk-visible@m">
+                <div class="uk-card uk-card-default uk-card-body menu-lateral uk-light">
+                    <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                        <div class="uk-text-center">
+                            <a href="{% url 'index' %}"><img src="{% static 'contenido/imagenes/logo_14.png' %}" alt="avatar" width="250px"></a>
+                        </div>
+                        <li class="uk-nav-divider"></li>
+                        <li><a href="{% url 'acercade' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> ¿Que es CETAF?</a></li>
+                        <li class="uk-nav-header" style="margin-top:20px">TABLERO DE CONTROL</li>
+                        <li><a href="{% url 'lts_usuarios' %}"><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuarios</a></li>
+                        <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
+                        <li><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: nut"></span> Activos</a></li>
+                        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: users"></span> Tipo Usuarios</a></li>
+                        <li><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span> Sedes</a></li>
+                        <li><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> Ambientes</a></li>
+                        <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
+                        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: database"></span> Consultas</a></li>
+                        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
+                        <li class="uk-nav-divider" style="margin-top:30px"></li>
+                        <li class="uk-active"><a><span>Email:</span></a></li>
+                        <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
+                        <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
+                        <li class="uk-nav-divider" style="margin-top:20px"></li>
+                        <li><a href="{% url 'ayuda' %}"><span class="uk-margin-small-right" uk-icon="icon: info"></span> Ayuda</a></li>
+                  </ul>
+                </div>
             </div>
-            <div class="uk-width-4-5">
-                <div class="uk-card uk-card-secondary uk-card-body " style="margin: 20px; border-radius: 10px 30px">Expand</div>
+            <div class="uk-width-expand@m">
+                <div class="uk-card uk-card-default uk-card-body contenido-central">
+                    {% block contenido %}
+                        <img class="uk-align-center uk-responsive-width" src="{% static 'contenido/imagenes/logo_14.png' %}" alt="avatar" width="900px">
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <div uk-grid>
+            <div class="uk-width-expand@m" style="margin-bottom: 20px">
+                <div class="uk-card uk-card-default uk-card-body firma" style="text-align:center;">
+                    <span>CETAF 2020 | Creado por Shihan</span>
+                </div>
             </div>
         </div>
     </body>
+
+    <style>
+        html{
+            background:url("{% static 'contenido/imagenes/fondo_90.jpg' %}");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        body{
+            font-family: 'Inconsolata', monospace;
+        }
+        .firma{
+            float: bottom;
+            margin-left: 20px;
+            margin-right: 20px;
+            border-radius: 30px 10px;
+            opacity: 1;
+            border: solid 5px orangered;
+        }
+        .barra-superior{
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px 30px;
+            border: solid 5px orangered;
+            height: 80px;
+        }
+        @media(min-width: 900px){
+            .contenido-central{
+                border-radius: 30px 10px;
+                margin-right: 20px;
+                margin-bottom: 20px;
+                height: 100%;
+                opacity: 1;
+                background: orangered;
+            }
+            .menu-lateral{
+                min-width: 250px;
+                margin-left: 20px;
+                margin-bottom: 20px;
+                border-radius: 10px 30px;
+                height: 100%;
+                opacity: 1;
+                background: orangered;
+            }
+        }
+        @media(max-width: 900px){
+            .contenido-central{
+                border-radius: 30px 10px;
+                margin-right: 20px;
+                margin-left: 20px;
+                margin-bottom: 20px;
+                height: 100%;
+                opacity: 1;
+                background: orangered;
+            }
+        }
+    </style>
+
 </html>
