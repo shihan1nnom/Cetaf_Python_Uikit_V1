@@ -1,0 +1,33 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Usuarios{% endblock %}
+
+{% block contenido %}
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
+        <h3 class="uk-card-title" style="font-family:Piazzolla">Crear Usuario</h3>
+        <form class="uk-form-horizontal uk-margin-large" method="post">
+             {% csrf_token %}
+             <div class="uk-margin">
+                 <label class="uk-form-label" for="username">Nombre de usuario:</label>
+                 <div class="uk-form-controls">
+                     <input class="uk-input" name="username" type="text">
+                 </div>
+             </div>
+             <div class="uk-margin">
+                 <label class="uk-form-label" for="password1">Contraseña:</label>
+                 <div class="uk-form-controls">
+                     <input class="uk-input" name="password1" type="password">
+                 </div>
+             </div>
+             <div class="uk-margin">
+                 <label class="uk-form-label" for="password2">Confirmar Contraseña:</label>
+                 <div class="uk-form-controls">
+                     <input class="uk-input" name="password2" type="password">
+                 </div>
+             </div>
+          <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px">Registrar</button>
+      </form>
+    </div>
+</div>
+{% endblock %}

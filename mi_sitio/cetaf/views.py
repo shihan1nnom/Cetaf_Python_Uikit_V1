@@ -7,12 +7,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 
 #
 # Vistas Home
 #
-
 def index(request):
     return render(request, 'home/index.html')
 
@@ -340,6 +340,18 @@ def borrar_asignacion(request, _id):
     else:
         return render(request, 'asignaciones/borrar_asignacion.html', {'asignacion': data})
 
+#
+# CRUD Usuarios
+#
+def crear_usuarios(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request,'usuarios/crear_usuario.html',{'form':form})
 
 #
 # Login
