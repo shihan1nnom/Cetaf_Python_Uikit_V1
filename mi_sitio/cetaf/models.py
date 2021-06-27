@@ -45,7 +45,7 @@ class Activo(models.Model):
 
 
 class Asignacion(models.Model):
-    nombre_activo = models.ForeignKey(Activo, on_delete=models.CASCADE)
+    nombre_activo = models.OneToOneField(Activo, on_delete=models.CASCADE)
     persona_responsable = models.CharField(max_length=50)
     sede_asignada = models.ForeignKey(Sede, on_delete=models.CASCADE)
     ambiente_asignado = models.ForeignKey(Ambiente, on_delete=models.CASCADE)

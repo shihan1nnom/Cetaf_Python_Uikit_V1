@@ -297,6 +297,9 @@ def crear_asignacion(request):
         if form.is_valid():
             form.save()
             return redirect('/asignaciones')
+        else:
+            messages.info(request, 'El elemento ya ha sido asignado')
+            return redirect('/asignaciones/crear')
     else:
         form = AsignacionForm()
         contexto = {
@@ -322,6 +325,9 @@ def actualizar_asignacion(request, _id):
         if form.is_valid():
             form.save()
             return redirect(f'/asignaciones/{_id}/')
+        else:
+            messages.info(request, 'El elemento ya ha sido asignado')
+            return redirect(f'/asignaciones/{_id}/actualizar')
     else:
         form = AsignacionForm(instance=dato_old)
         contexto = {
