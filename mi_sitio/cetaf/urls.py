@@ -40,6 +40,9 @@ urlpatterns = [
     path('asignaciones/<int:_id>/actualizar', views.actualizar_asignacion, name='actualizar_asignacion'),
     path('asignaciones/<int:_id>/borrar', views.borrar_asignacion, name='borrar_asignacion'),
 
+    path('consultas/', views.lts_consulta, name='lts_consulta'),
+    path('consultas/<int:_id>/', views.detalle_consulta, name='detalle_consulta'),
+
     path('login/', views.iniciar_sesion, name="login"),
     path('logout', views.cerrar_sesion, name='logout'),
 ]

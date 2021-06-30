@@ -349,6 +349,7 @@ def borrar_asignacion(request, _id):
 #
 # CRUD Usuarios
 #
+@login_required(login_url="login")
 def crear_usuarios(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -358,6 +359,26 @@ def crear_usuarios(request):
     else:
         form = UserCreationForm()
     return render(request,'usuarios/crear_usuario.html',{'form':form})
+
+#
+# Consultas / Reportes
+#
+@login_required(login_url="login")
+def lts_consulta(request):
+    lista = Asignacion.objects.all()
+    paginador = Paginator(lista, 10)
+    num_pagina = request.GET.get('page')
+    obj_pagina = paginador.get_page(num_pagina)
+
+    return render(request, 'consultas/index.html', {'obj_pagina': obj_pagina})
+
+def detalle_consulta(request, _id):
+    try:
+        consulta = Asignacion.objects.get(pk = _id)
+    except Asignacion.DoesNotExist:
+        raise Http404('Este registro no existe')
+
+    return render(request, 'consultas/detalle_consulta.html', {'consulta': consulta})
 
 #
 # Login

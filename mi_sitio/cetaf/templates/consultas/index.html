@@ -1,18 +1,17 @@
 {% extends "home/index.html" %}
 {% load static %}
 
-{% block titulo %}Asignaciones{% endblock %}
+{% block titulo %}Consultas{% endblock %}
 
 {% block contenido %}
 <div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
-    <h3 class="uk-card-title uk-text-bold">ASIGNACIONES</h3>
-    {% block contenido_asignacion %}
+    <h3 class="uk-card-title uk-text-bold">CONSULTAS</h3>
+    {% block contenido_consulta %}
         <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-            <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge" style="border-radius: 30px 10px; margin-left: 30px"><a class="uk-text-danger" href="{% url 'crear_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
         </ul>
         <ul class="uk-list uk-list-striped">
-            {% for asignacion in obj_pagina %}
-                <li><a href="{% url 'detalle_asignacion' asignacion.id %}" uk-toggle>|+| {{asignacion.nombre_activo.num_serie}}</a></li>
+            {% for consulta in obj_pagina %}
+                <li><a href="{% url 'detalle_consulta' consulta.id %}" uk-toggle>|+| {{consulta.nombre_activo.num_serie}}</a></li>
             {% endfor %}
         </ul>
         <div>
@@ -34,6 +33,6 @@
               </ul>
           </span>
         </div>
-    {% endblock contenido_asignacion %}
+    {% endblock contenido_consulta %}
 </div>
 {% endblock %}
