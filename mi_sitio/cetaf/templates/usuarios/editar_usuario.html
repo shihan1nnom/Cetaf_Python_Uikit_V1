@@ -1,0 +1,26 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Usuarios{% endblock %}
+
+{% block contenido %}
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
+    <h3 class="uk-card-title" style="font-family:Piazzolla">Crear Usuario</h3>
+    <form class="uk-form-horizontal uk-margin-large" method="post">
+         {% csrf_token %}
+         {% for field in form %}
+         <div class="uk-margin">
+            <label class="uk-form-label">{{ field.errors }}</label>
+            <label class="uk-form-label">{{ field.label_tag }}</label>
+            <div class="uk-form-controls">
+                {{ field }}
+            </div>
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+         </div>
+         {% endfor %}
+      <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px">Actualizar</button>
+  </form>
+</div>
+{% endblock %}

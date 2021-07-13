@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm
 from django.core.paginator import Paginator
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -359,6 +359,16 @@ def crear_usuarios(request):
     else:
         form = UserCreationForm()
     return render(request,'usuarios/crear_usuario.html',{'form':form})
+
+def editar_usuarios(request):
+    if request.method == "POST":
+        form = UserChangeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = UserChangeForm(instance=request.user)
+    return render(request, 'usuarios/editar_usuario.html', {'form':form})
 
 #
 # Consultas / Reportes
