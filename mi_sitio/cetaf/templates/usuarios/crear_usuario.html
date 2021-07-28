@@ -6,28 +6,47 @@
 {% block contenido %}
 <div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
         <h3 class="uk-card-title" style="font-family:Piazzolla">Crear Usuario</h3>
-        <form class="uk-form-horizontal uk-margin-large" method="post">
-             {% csrf_token %}
-             <div class="uk-margin">
-                 <label class="uk-form-label" for="username">Nombre de usuario:</label>
-                 <div class="uk-form-controls">
-                     <input class="uk-input" name="username" type="text">
-                 </div>
-             </div>
-             <div class="uk-margin">
-                 <label class="uk-form-label" for="password1">Contraseña:</label>
-                 <div class="uk-form-controls">
-                     <input class="uk-input" name="password1" type="password">
-                 </div>
-             </div>
-             <div class="uk-margin">
-                 <label class="uk-form-label" for="password2">Confirmar Contraseña:</label>
-                 <div class="uk-form-controls">
-                     <input class="uk-input" name="password2" type="password">
-                 </div>
-             </div>
-          <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px">Registrar</button>
-      </form>
+        {% if user.is_staff %}
+            <form class="uk-form-horizontal uk-margin-large" method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" name="{{ form.username.html_name}}" type="text">
+                    </div>
+                    {% if form.username.help_text %}
+                    <p class="help">Requerido. 150 caracteres o menos. Letras, dígitos y @ /. / + / - / _</p>
+                    {% endif %}
+                </div>
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="{{ form.password1.id_for_label }}">Contraseña:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" name="{{ form.password1.html_name}}" type="password">
+                    </div>
+                    {% if form.password1.help_text %}
+                    <ul class="uk-list uk-list-hyphen">
+                        <li>Su contraseña no puede ser muy similar a su otra información personal.</li>
+                        <li>Su contraseña debe contener al menos 8 caracteres.</li>
+                        <li>Su contraseña no puede ser una contraseña de uso común.</li>
+                        <li>Su contraseña no puede ser solamente numérica.</li>
+                    </ul>
+                    {% endif %}
+                </div>
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="{{ form.password2.id_for_label }}">Confirmar Contraseña:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" name="{{ form.password2.html_name}}" type="password">
+                    </div>
+                    {% if form.password2.help_text %}
+                    <p class="help">Ingrese la misma contraseña que antes, para verificación.</p>
+                    {% endif %}
+                </div>
+            <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px">Registrar</button>
+        </form>
+        {% else %}
+            <p style="padding: 10px; color: red">No tiene permisos para crear nuevos usuarios</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

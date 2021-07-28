@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
-from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm
+from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -34,7 +34,8 @@ def lts_usuarios(request):
 #
 # CRUD de las Sedes
 #
-@login_required(login_url="login")
+#@login_required(login_url="login")
+@permission_required('cetaf.view_sede', raise_exception=True)
 def lts_sedes(request):
     lista = Sede.objects.all()
     paginador = Paginator(lista, 10)
@@ -43,6 +44,7 @@ def lts_sedes(request):
 
     return render(request, 'sedes/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.add_sede', raise_exception=True)
 def crear_sede(request):
     if request.method == 'POST':
         form = SedeForm(request.POST)
@@ -56,6 +58,7 @@ def crear_sede(request):
         }
         return render(request, 'sedes/crear_sede.html', contexto)
 
+@permission_required('cetaf.view_sede', raise_exception=True)
 def detalle_sede(request, _id):
     try:
         sede = Sede.objects.get(pk = _id)
@@ -64,6 +67,7 @@ def detalle_sede(request, _id):
 
     return render(request, 'sedes/detalle_sede.html', {'sede': sede})
 
+@permission_required('cetaf.change_sede', raise_exception=True)
 def actualizar_sede(request, _id):
     try:
         dato_old = get_object_or_404(Sede, id = _id)
@@ -81,6 +85,7 @@ def actualizar_sede(request, _id):
         }
         return render(request, 'sedes/actualizar_sede.html', contexto)
 
+@permission_required('cetaf.delete_sede', raise_exception=True)
 def borrar_sede(request, _id):
     try:
         data = get_object_or_404(Sede, id = _id)
@@ -96,7 +101,8 @@ def borrar_sede(request, _id):
 #
 # CRUD de las Ambientes
 #
-@login_required(login_url="login")
+#@login_required(login_url="login")
+@permission_required('cetaf.view_ambiente', raise_exception=True)
 def lts_ambiente(request):
     lista = Ambiente.objects.all()
     paginador = Paginator(lista, 10)
@@ -105,6 +111,7 @@ def lts_ambiente(request):
 
     return render(request, 'ambientes/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.add_ambiente', raise_exception=True)
 def crear_ambiente(request):
     if request.method == 'POST':
         form = AmbienteForm(request.POST)
@@ -118,6 +125,7 @@ def crear_ambiente(request):
         }
         return render(request, 'ambientes/crear_ambiente.html', contexto)
 
+@permission_required('cetaf.view_ambiente', raise_exception=True)
 def detalle_ambiente(request, _id):
     try:
         ambiente = Ambiente.objects.get(pk = _id)
@@ -126,6 +134,7 @@ def detalle_ambiente(request, _id):
 
     return render(request, 'ambientes/detalle_ambiente.html', {'ambiente': ambiente})
 
+@permission_required('cetaf.change_ambiente', raise_exception=True)
 def actualizar_ambiente(request, _id):
     try:
         dato_old = get_object_or_404(Ambiente, id = _id)
@@ -143,6 +152,7 @@ def actualizar_ambiente(request, _id):
         }
         return render(request, 'ambientes/actualizar_ambiente.html', contexto)
 
+@permission_required('cetaf.delete_ambiente', raise_exception=True)
 def borrar_ambiente(request, _id):
     try:
         data = get_object_or_404(Ambiente, id = _id)
@@ -158,7 +168,7 @@ def borrar_ambiente(request, _id):
 #
 # CRUD de las Categorias
 #
-@login_required(login_url="login")
+@permission_required('cetaf.view_categoria', raise_exception=True)
 def lts_categoria(request):
     lista = Categoria.objects.all()
     paginador = Paginator(lista, 10)
@@ -167,6 +177,7 @@ def lts_categoria(request):
 
     return render(request, 'categorias/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.add_categoria', raise_exception=True)
 def crear_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -180,6 +191,7 @@ def crear_categoria(request):
         }
         return render(request, 'categorias/crear_categoria.html', contexto)
 
+@permission_required('cetaf.view_categoria', raise_exception=True)
 def detalle_categoria(request, _id):
     try:
         categoria = Categoria.objects.get(pk = _id)
@@ -188,6 +200,7 @@ def detalle_categoria(request, _id):
 
     return render(request, 'categorias/detalle_categoria.html', {'categoria': categoria})
 
+@permission_required('cetaf.change_categoria', raise_exception=True)
 def actualizar_categoria(request, _id):
     try:
         dato_old = get_object_or_404(Categoria, id = _id)
@@ -205,6 +218,7 @@ def actualizar_categoria(request, _id):
         }
         return render(request, 'categorias/actualizar_categoria.html', contexto)
 
+@permission_required('cetaf.delete_categoria', raise_exception=True)
 def borrar_categoria(request, _id):
     try:
         data = get_object_or_404(Categoria, id = _id)
@@ -220,7 +234,8 @@ def borrar_categoria(request, _id):
 #
 # CRUD de los Activos
 #
-@login_required(login_url="login")
+#@login_required(login_url="login")
+@permission_required('cetaf.view_activo', raise_exception=True)
 def lts_activo(request):
     lista = Activo.objects.all()
     paginador = Paginator(lista, 10)
@@ -229,6 +244,7 @@ def lts_activo(request):
 
     return render(request, 'activos/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.add_activo', raise_exception=True)
 def crear_activo(request):
     if request.method == 'POST':
         form = ActivoForm(request.POST)
@@ -242,6 +258,7 @@ def crear_activo(request):
         }
         return render(request, 'activos/crear_activo.html', contexto)
 
+@permission_required('cetaf.view_activo', raise_exception=True)
 def detalle_activo(request, _id):
     try:
         activo = Activo.objects.get(pk = _id)
@@ -250,6 +267,7 @@ def detalle_activo(request, _id):
 
     return render(request, 'activos/detalle_activo.html', {'activo': activo})
 
+@permission_required('cetaf.change_activo', raise_exception=True)
 def actualizar_activo(request, _id):
     try:
         dato_old = get_object_or_404(Activo, id = _id)
@@ -267,6 +285,7 @@ def actualizar_activo(request, _id):
         }
         return render(request, 'activos/actualizar_activo.html', contexto)
 
+@permission_required('cetaf.delete_activo', raise_exception=True)
 def borrar_activo(request, _id):
     try:
         data = get_object_or_404(Activo, id = _id)
@@ -282,7 +301,8 @@ def borrar_activo(request, _id):
 #
 # CRUD de las asignaciones
 #
-@login_required(login_url="login")
+#@login_required(login_url="login")
+@permission_required('cetaf.view_asignacion', raise_exception=True)
 def lts_asignacion(request):
     lista = Asignacion.objects.all()
     paginador = Paginator(lista, 10)
@@ -291,6 +311,7 @@ def lts_asignacion(request):
 
     return render(request, 'asignaciones/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.add_asignacion', raise_exception=True)
 def crear_asignacion(request):
     if request.method == 'POST':
         form = AsignacionForm(request.POST)
@@ -307,6 +328,7 @@ def crear_asignacion(request):
         }
         return render(request, 'asignaciones/crear_asignacion.html', contexto)
 
+@permission_required('cetaf.view_asignacion', raise_exception=True)
 def detalle_asignacion(request, _id):
     try:
         asignacion = Asignacion.objects.get(pk = _id)
@@ -315,6 +337,7 @@ def detalle_asignacion(request, _id):
 
     return render(request, 'asignaciones/detalle_asignacion.html', {'asignacion': asignacion})
 
+@permission_required('cetaf.change_asignacion', raise_exception=True)
 def actualizar_asignacion(request, _id):
     try:
         dato_old = get_object_or_404(Asignacion, id = _id)
@@ -335,6 +358,7 @@ def actualizar_asignacion(request, _id):
         }
         return render(request, 'asignaciones/actualizar_asignacion.html', contexto)
 
+@permission_required('cetaf.delete_asignacion', raise_exception=True)
 def borrar_asignacion(request, _id):
     try:
         data = get_object_or_404(Asignacion, id = _id)
@@ -360,20 +384,25 @@ def crear_usuarios(request):
         form = UserCreationForm()
     return render(request,'usuarios/crear_usuario.html',{'form':form})
 
+#@login_required(login_url="login")
+@permission_required('auth.change_user', raise_exception=True)
 def editar_usuarios(request):
     if request.method == "POST":
-        form = UserChangeForm(request.POST)
+        form = UsuarioForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect(f'/usuarios/editar')
+        else:
+            messages.info(request, 'Error en guardado')
+            return redirect(f'/usuarios/editar') 
     else:
-        form = UserChangeForm(instance=request.user)
+        form = UsuarioForm(instance=request.user)
     return render(request, 'usuarios/editar_usuario.html', {'form':form})
 
 #
 # Consultas / Reportes
 #
-@login_required(login_url="login")
+#@login_required(login_url="login")
 def lts_consulta(request):
     lista = Asignacion.objects.all()
     paginador = Paginator(lista, 10)
@@ -382,6 +411,7 @@ def lts_consulta(request):
 
     return render(request, 'consultas/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('cetaf.view_consulta', raise_exception=True)
 def detalle_consulta(request, _id):
     try:
         consulta = Asignacion.objects.get(pk = _id)
