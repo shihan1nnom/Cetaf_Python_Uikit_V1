@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
-from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm
+from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm, PerfilForm
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout, authenticate
@@ -391,6 +391,7 @@ def editar_usuarios(request):
         form = UsuarioForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.info(request, 'Actualizacion realizada con exito')
             return redirect(f'/usuarios/editar')
         else:
             messages.info(request, 'Error en guardado')
@@ -398,6 +399,21 @@ def editar_usuarios(request):
     else:
         form = UsuarioForm(instance=request.user)
     return render(request, 'usuarios/editar_usuario.html', {'form':form})
+
+@login_required(login_url="login")
+def editar_perfil(request):
+    if request.method == "POST":
+        form = PerfilForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Actualizacion realizada con exito')
+            return redirect(f'/usuarios/editar_perfil')
+        else:
+            messages.info(request, 'Error en guardado')
+            return redirect(f'/usuarios/editar_perfil') 
+    else:
+        form = PerfilForm(instance=request.user)
+    return render(request, 'usuarios/editar_perfil.html', {'form':form})
 
 #
 # Consultas / Reportes
