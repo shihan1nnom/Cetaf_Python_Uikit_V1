@@ -33,8 +33,9 @@
                     <li class="uk-parent">
                         <a href="{% url 'crear_usuarios' %}" class=""><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuarios</a>
                         <ul class="uk-nav-sub" style="background: #0f0f0f; margin-right: 10px; margin-left: 10px; border-radius: 5px 15px;">
-                            <li><a href="{% url 'crear_usuarios' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span> Crear</a></li>
-                            <li><a href="{% if user.is_staff %}{% url 'editar_usuarios' %}{% else %}{% url 'editar_perfil' %}{% endif %}"><span uk-icon="pencil" style="margin-right: 20px;"></span> Editar</a></li>
+                            <li><a href="{% url 'crear_usuarios' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span>Crear</a></li>
+                            <li><a href="{% if user.is_staff %}{% url 'editar_usuarios' %}{% else %}{% url 'editar_perfil' %}{% endif %}"><span uk-icon="pencil" style="margin-right: 20px;"></span>Editar</a></li>
+                            <li><a href="{% url 'cambiar_password' %}" ><span uk-icon="lock" style="margin-right: 20px;"></span>Cambiar contraseña</a></li>
                         </ul>
                     </li>
                     <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
@@ -78,8 +79,9 @@
                         <li class="uk-parent">
                             <a href="{% url 'crear_usuarios' %}" class=""><span class="uk-margin-small-right" uk-icon="icon: user"></span> Usuarios</a>
                             <ul class="uk-nav-sub" style="background: #0f0f0f; margin-right: 10px; margin-left: 10px; border-radius: 5px 15px;">
-                                <li><a href="{% url 'crear_usuarios' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span> Crear</a></li>
-                                <li><a href="{% if user.is_staff %}{% url 'editar_usuarios' %}{% else %}{% url 'editar_perfil' %}{% endif %}"><span uk-icon="pencil" style="margin-right: 20px;"></span> Editar</a></li>
+                                <li><a href="{% url 'crear_usuarios' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span>Crear</a></li>
+                                <li><a href="{% if user.is_staff %}{% url 'editar_usuarios' %}{% else %}{% url 'editar_perfil' %}{% endif %}"><span uk-icon="pencil" style="margin-right: 20px;"></span>Editar</a></li>
+                                <li><a href="{% url 'cambiar_password' %}" ><span uk-icon="lock" style="margin-right: 20px;"></span>Cambiar contraseña</a></li>
                             </ul>
                         </li>
                         <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>

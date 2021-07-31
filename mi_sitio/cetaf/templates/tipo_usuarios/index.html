@@ -1,0 +1,36 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Usuarios{% endblock %}
+
+{% block contenido %}
+<div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
+    <h3 class="uk-card-title uk-text-bold">Lista de usuarios</h3>
+    {% block contenido_sede %}
+        <ul class="uk-list uk-list-striped">
+            {% for usuario in obj_pagina %}
+                <li><a href="" uk-toggle>|+| {{usuario.username}}</a></li>
+            {% endfor %}
+        </ul>
+        <div>
+          <span>
+              <ul class="uk-pagination uk-flex-center" uk-margin>
+                  {% if obj_pagina.has_previous %}
+                  <li><a href="?page=1">&laquo; Primera</a></li>
+                  <li><a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a></li>
+                  {% endif %}
+
+                  <span>
+                      <li class="uk-disabled"><span>Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.</span></li>
+                  </span>
+
+                  {% if obj_pagina.has_next %}
+                      <li><a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a></li>
+                      <li><a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a></li>
+                  {% endif %}
+              </ul>
+          </span>
+        </div>
+    {% endblock %}
+</div>
+{% endblock %}

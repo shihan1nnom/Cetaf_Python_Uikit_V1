@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
-from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm, PerfilForm
+from django.contrib.auth.models import User, Group
+from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm, PerfilForm, GruposForm
 from django.core.paginator import Paginator
-from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -414,6 +415,47 @@ def editar_perfil(request):
     else:
         form = PerfilForm(instance=request.user)
     return render(request, 'usuarios/editar_perfil.html', {'form':form})
+
+@login_required(login_url="login")
+def cambiar_password(request):
+    if request.method == "POST":
+        form = SetPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Cambio de contraseña realizado con exito')
+            return redirect(f'/usuarios/password')
+        else:
+            messages.info(request, 'Error en el cambio de contraseña')
+            return redirect(f'/usuarios/password') 
+    else:
+        form = SetPasswordForm(request.user, request.POST)
+    return render(request, 'usuarios/password.html', {'form':form})
+
+#
+# Tipos de usuario / Grupos
+#
+def lts_usuarios(request):
+    lista = User.objects.all()
+    paginador = Paginator(lista, 10)
+    num_pagina = request.GET.get('page')
+    obj_pagina = paginador.get_page(num_pagina)
+
+    return render(request, 'tipo_usuarios/index.html', {'obj_pagina': obj_pagina})
+
+def crear_grupo(request):
+    if request.method == "POST":
+        form = GruposForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Grupo creado con exito')
+            return redirect(f'/tipo_usuarios/crear')
+        else:
+            messages.info(request, 'Error al crear el grupo')
+            return redirect(f'/tipo_usuarios/crear') 
+    else:
+        form = GruposForm()
+    return render(request, 'tipo_usuarios/crear_grupos.html', {'form':form})
+
 
 #
 # Consultas / Reportes

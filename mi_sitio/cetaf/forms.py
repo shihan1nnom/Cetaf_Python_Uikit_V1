@@ -2,7 +2,7 @@ from django import forms
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext, gettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 class SedeForm(forms.ModelForm):
@@ -180,4 +180,17 @@ class PerfilForm(forms.ModelForm):
         help_texts = {
             'password': 'Las contraseñas sin procesar no se almacenan, por lo que no hay forma de ver la contraseña de este usuario, pero puede cambiar la contraseña.',
             'username': 'Requerido. 150 caracteres o menos. Letras, dígitos y @ /. / + / - / _ .',
+        }
+
+class GruposForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'uk-input'}),
+            'permissions': forms.SelectMultiple(attrs={'class': 'uk-select'}),
+        }
+        labels = {
+            'name': 'Nombre del grupo:',
+            'permissions': 'Definir permisos:'
         }

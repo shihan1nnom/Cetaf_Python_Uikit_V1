@@ -1,0 +1,38 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block titulo %}Tipos de usuarios{% endblock %}
+
+{% block contenido %}
+<div class="uk-card uk-card-default uk-card-body uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
+    {% if messages %}
+        <div style="background: black; height: 70px; border-radius: 30px 10px;">
+            <ul class="messages" style="padding-top: 25px">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: white">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <h3 class="uk-card-title" style="font-family:Piazzolla">Crear nuevo grupo</h3>
+    <p>Los grupos aqui definidos tienen como objetivo definir los tipos de accesos [Tambien pueden definirsen como "tipos de usuarios" o "perfil de acceso"]</p>
+    <form class="uk-form-horizontal uk-margin-large" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="uk-margin">
+            <label class="uk-form-label" for="{{ form.name.id_for_label }}">Nombre del grupo:</label>
+            <div class="uk-form-controls">
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="{{ form.permissions.id_for_label }}">Definir Permisos:</label>
+            <div class="uk-form-controls">
+                {{ form.permissions }}
+            </div>
+        </div>
+        <button class="uk-button uk-button-danger" type="submit" style="border-radius: 30px 10px; width: 200px" name="_save">Crear</button>
+    </form>
+</div>
+{% endblock %}
+
