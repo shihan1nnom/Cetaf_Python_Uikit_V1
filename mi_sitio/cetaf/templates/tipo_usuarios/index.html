@@ -9,7 +9,7 @@
     {% block contenido_sede %}
         <ul class="uk-list uk-list-striped">
             {% for usuario in obj_pagina %}
-                <li><a href="" uk-toggle>|+| {{usuario.username}}</a></li>
+                <li><a href="{% url 'actualizar_permisos' usuario.id %}" uk-toggle>|+| {{usuario.username}}</a></li>
             {% endfor %}
         </ul>
         <div>

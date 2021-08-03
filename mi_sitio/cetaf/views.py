@@ -432,8 +432,9 @@ def cambiar_password(request):
     return render(request, 'usuarios/password.html', {'form':form})
 
 #
-# Tipos de usuario / Grupos
+# Tipos de usuario / Grupos [Permisos]
 #
+@permission_required('auth.view_user', raise_exception=True)
 def lts_usuarios(request):
     lista = User.objects.all()
     paginador = Paginator(lista, 10)
@@ -442,6 +443,7 @@ def lts_usuarios(request):
 
     return render(request, 'tipo_usuarios/index.html', {'obj_pagina': obj_pagina})
 
+@permission_required('auth.add_user', raise_exception=True)
 def crear_grupo(request):
     if request.method == "POST":
         form = GruposForm(request.POST)
@@ -455,6 +457,25 @@ def crear_grupo(request):
     else:
         form = GruposForm()
     return render(request, 'tipo_usuarios/crear_grupos.html', {'form':form})
+
+@permission_required('auth.change_user', raise_exception=True)
+def actualizar_permisos(request, _id):
+    try:
+        dato_old = get_object_or_404(User, id = _id)
+    except Exception:
+        raise Http404('El registro no existe')
+    if request.method == "POST":
+        form = UsuarioForm(request.POST, instance=dato_old)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Actualizacion realizada con exito')
+            return redirect(f'/tipo_usuarios/{_id}/editar')
+        else:
+            messages.info(request, 'Error en guardado')
+            return redirect(f'/tipo_usuarios/{_id}/editar') 
+    else:
+        form = UsuarioForm(instance=dato_old)
+    return render(request, 'tipo_usuarios/actualizar_permisos.html', {'form':form})
 
 
 #

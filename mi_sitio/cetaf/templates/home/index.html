@@ -40,7 +40,13 @@
                     </li>
                     <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
                     <li><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: nut"></span> Activos</a></li>
-                    <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: users"></span> Tipo Usuarios</a></li>
+                    <li class="uk-parent">
+                        <a href="{% url 'lts_usuarios' %}" class=""><span class="uk-margin-small-right" uk-icon="icon: star"></span>Permisos</a>
+                        <ul class="uk-nav-sub" style="background: #0f0f0f; margin-right: 10px; margin-left: 10px; border-radius: 5px 15px;">
+                            <li><a href="{% url 'crear_grupo' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span>Grupo [Permisos]</a></li>
+                            <li><a href="{% url 'lts_usuarios' %}"><span uk-icon="users" style="margin-right: 20px;"></span>Listar Usuarios</a></li>
+                        </ul>
+                    </li>
                     <li><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span> Sedes</a></li>
                     <li><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> Ambientes</a></li>
                     <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
@@ -86,7 +92,13 @@
                         </li>
                         <li><a href="{% url 'lts_categoria' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Categorias</a></li>
                         <li><a href="{% url 'lts_activo' %}"><span class="uk-margin-small-right" uk-icon="icon: nut"></span> Activos</a></li>
-                        <li><a href="#" class="deshabilitar"><span class="uk-margin-small-right" uk-icon="icon: users"></span> Tipo Usuarios</a></li>
+                        <li class="uk-parent">
+                            <a href="{% url 'lts_usuarios' %}" class=""><span class="uk-margin-small-right" uk-icon="icon: star"></span>Permisos</a>
+                            <ul class="uk-nav-sub" style="background: #0f0f0f; margin-right: 10px; margin-left: 10px; border-radius: 5px 15px;">
+                                <li><a href="{% url 'crear_grupo' %}" ><span uk-icon="plus-circle" style="margin-right: 20px;"></span>Grupo [Permisos]</a></li>
+                                <li><a href="{% url 'lts_usuarios' %}"><span uk-icon="users" style="margin-right: 20px;"></span>Listar Usuarios</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{% url 'lts_sedes' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span> Sedes</a></li>
                         <li><a href="{% url 'lts_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: home"></span> Ambientes</a></li>
                         <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>

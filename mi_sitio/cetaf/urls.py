@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('tipo_usuarios/', views.lts_usuarios, name='lts_usuarios'),
     path('tipo_usuarios/crear', views.crear_grupo, name='crear_grupo'),
+    path('tipo_usuarios/<int:_id>/editar', views.actualizar_permisos, name='actualizar_permisos'),
 
     path('sedes/', views.lts_sedes, name='lts_sedes'),
     path('sedes/<int:_id>/', views.detalle_sede, name='detalle_sede'),
