@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import PermissionDenied
 
 
 #
@@ -22,14 +23,6 @@ def acercade(request):
 
 def ayuda(request):
     return render(request, 'home/ayuda.html')
-
-
-#
-# CRUD de Usuarios
-#
-@login_required(login_url="login")
-def lts_usuarios(request):
-    return render(request, 'usuarios/index.html')
 
 
 #
@@ -375,6 +368,7 @@ def borrar_asignacion(request, _id):
 # CRUD Usuarios
 #
 @login_required(login_url="login")
+@permission_required('auth.add_user', raise_exception=True)
 def crear_usuarios(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
