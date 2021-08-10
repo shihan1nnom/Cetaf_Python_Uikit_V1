@@ -55,3 +55,11 @@ class Asignacion(models.Model):
 
     def __str__(self):
         return self.persona_responsable
+
+    class Meta:
+        permissions = [
+            ("view_consulta", "Ver consultas"),
+            ("add_consulta", "Agregar consultas"),
+            ("change_consulta", "Editar consultas"),
+            ("delete_consulta", "Eliminar consultas"),
+        ]

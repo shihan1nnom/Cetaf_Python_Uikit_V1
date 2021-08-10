@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views, forms
 
@@ -48,6 +48,7 @@ urlpatterns = [
     path('asignaciones/<int:_id>/borrar', views.borrar_asignacion, name='borrar_asignacion'),
 
     path('consultas/', views.lts_consulta, name='lts_consulta'),
+    path('consultas/filtrada', views.filtrar_consulta, name='filtrar_consulta'),
     path('consultas/<int:_id>/', views.detalle_consulta, name='detalle_consulta'),
 
     path('login/', views.iniciar_sesion, name="login"),

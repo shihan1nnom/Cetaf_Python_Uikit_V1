@@ -54,8 +54,11 @@
                     <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
                     <li class="uk-nav-divider" style="margin-top:30px"></li>
                     <li class="uk-active"><a><span>Email:</span></a></li>
-                    <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
-                    <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
+                    {% if user.username %}
+                        <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
+                    {% endif %}
                     <li class="uk-nav-divider" style="margin-top:20px"></li>
                     <li><a href="{% url 'ayuda' %}"><span class="uk-margin-small-right" uk-icon="icon: info"></span> Ayuda</a></li>
               </ul>

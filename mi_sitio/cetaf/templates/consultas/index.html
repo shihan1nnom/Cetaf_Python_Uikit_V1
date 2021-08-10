@@ -7,32 +7,42 @@
 <div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
     <h3 class="uk-card-title uk-text-bold">CONSULTAS</h3>
     {% block contenido_consulta %}
-        <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-        </ul>
-        <ul class="uk-list uk-list-striped">
-            {% for consulta in obj_pagina %}
-                <li><a href="{% url 'detalle_consulta' consulta.id %}" uk-toggle>|+| {{consulta.nombre_activo.num_serie}}</a></li>
-            {% endfor %}
-        </ul>
-        <div>
-          <span>
-              <ul class="uk-pagination uk-flex-center" uk-margin>
-                  {% if obj_pagina.has_previous %}
-                  <li><a href="?page=1">&laquo; Primera</a></li>
-                  <li><a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a></li>
-                  {% endif %}
-
-                  <span>
-                      <li class="uk-disabled"><span>Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.</span></li>
-                  </span>
-
-                  {% if obj_pagina.has_next %}
-                      <li><a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a></li>
-                      <li><a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a></li>
-                  {% endif %}
-              </ul>
-          </span>
-        </div>
+    <table class="uk-table uk-table-hover uk-table-divider">
+        <form action="{% url 'filtrar_consulta' %}" method="get">
+            <input class="uk-input" name="buscar" type="text" placeholder="Buscar elemento" style="border-radius: 10px 2px;">
+            <p>El elmento a buscar se puede buscar mediante:</p>
+            <ul class="uk-list uk-list-disc uk-list-primary">
+                <li>Nombre del activo</li>
+                <li>Persona responsable del activo</li>
+                <li>Categoria del activo</li>
+                <li>Sede del activo</li>
+                <li>Ambiente del activo</li>
+            </ul>
+            <button class="uk-button uk-button-default" type="submit" style="border-radius: 10px 2px;">Buscar</button>
+        </form>
+        <thead>
+            <tr>
+                <th>Activo</th>
+                <th>Responsable</th>
+                <th>Categoria</th>
+                <th>Sede</th>
+                <th>Ambiente</th>
+                <th>Asignado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campo in lts_filtrada %}
+                <tr>
+                    <td>{{ campo.nombre_activo }}</td>
+                    <td>{{ campo.persona_responsable }}</td>
+                    <td>{{ campo.nombre_activo.categoria }}</td>
+                    <td>{{ campo.sede_asignada }}</td>
+                    <td>{{ campo.ambiente_asignado }}</td>
+                    <td>{{ campo.fecha_inicio }}</td>
+                </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
     {% endblock contenido_consulta %}
 </div>
 {% endblock %}

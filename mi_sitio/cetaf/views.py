@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseNotFound
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.models import User, Group
 from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm, PerfilForm, GruposForm
@@ -9,7 +9,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.db.models import Q
+from django.views.generic.list import ListView
 
 
 #
@@ -28,7 +30,7 @@ def ayuda(request):
 #
 # CRUD de las Sedes
 #
-#@login_required(login_url="login")
+@login_required(login_url="login")
 @permission_required('cetaf.view_sede', raise_exception=True)
 def lts_sedes(request):
     lista = Sede.objects.all()
@@ -38,6 +40,7 @@ def lts_sedes(request):
 
     return render(request, 'sedes/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('cetaf.add_sede', raise_exception=True)
 def crear_sede(request):
     if request.method == 'POST':
@@ -52,21 +55,23 @@ def crear_sede(request):
         }
         return render(request, 'sedes/crear_sede.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_sede', raise_exception=True)
 def detalle_sede(request, _id):
     try:
         sede = Sede.objects.get(pk = _id)
     except Sede.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'sedes/detalle_sede.html', {'sede': sede})
 
+@login_required(login_url="login")
 @permission_required('cetaf.change_sede', raise_exception=True)
 def actualizar_sede(request, _id):
     try:
         dato_old = get_object_or_404(Sede, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         form = SedeForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -79,12 +84,13 @@ def actualizar_sede(request, _id):
         }
         return render(request, 'sedes/actualizar_sede.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.delete_sede', raise_exception=True)
 def borrar_sede(request, _id):
     try:
         data = get_object_or_404(Sede, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         data.delete()
         return redirect('/sedes')
@@ -95,7 +101,7 @@ def borrar_sede(request, _id):
 #
 # CRUD de las Ambientes
 #
-#@login_required(login_url="login")
+@login_required(login_url="login")
 @permission_required('cetaf.view_ambiente', raise_exception=True)
 def lts_ambiente(request):
     lista = Ambiente.objects.all()
@@ -105,6 +111,7 @@ def lts_ambiente(request):
 
     return render(request, 'ambientes/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('cetaf.add_ambiente', raise_exception=True)
 def crear_ambiente(request):
     if request.method == 'POST':
@@ -119,21 +126,23 @@ def crear_ambiente(request):
         }
         return render(request, 'ambientes/crear_ambiente.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_ambiente', raise_exception=True)
 def detalle_ambiente(request, _id):
     try:
         ambiente = Ambiente.objects.get(pk = _id)
     except Ambiente.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'ambientes/detalle_ambiente.html', {'ambiente': ambiente})
 
+@login_required(login_url="login")
 @permission_required('cetaf.change_ambiente', raise_exception=True)
 def actualizar_ambiente(request, _id):
     try:
         dato_old = get_object_or_404(Ambiente, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         form = AmbienteForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -146,12 +155,13 @@ def actualizar_ambiente(request, _id):
         }
         return render(request, 'ambientes/actualizar_ambiente.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.delete_ambiente', raise_exception=True)
 def borrar_ambiente(request, _id):
     try:
         data = get_object_or_404(Ambiente, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         data.delete()
         return redirect('/ambientes')
@@ -162,6 +172,7 @@ def borrar_ambiente(request, _id):
 #
 # CRUD de las Categorias
 #
+@login_required(login_url="login")
 @permission_required('cetaf.view_categoria', raise_exception=True)
 def lts_categoria(request):
     lista = Categoria.objects.all()
@@ -171,6 +182,7 @@ def lts_categoria(request):
 
     return render(request, 'categorias/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('cetaf.add_categoria', raise_exception=True)
 def crear_categoria(request):
     if request.method == 'POST':
@@ -185,21 +197,23 @@ def crear_categoria(request):
         }
         return render(request, 'categorias/crear_categoria.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_categoria', raise_exception=True)
 def detalle_categoria(request, _id):
     try:
         categoria = Categoria.objects.get(pk = _id)
     except Categoria.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'categorias/detalle_categoria.html', {'categoria': categoria})
 
+@login_required(login_url="login")
 @permission_required('cetaf.change_categoria', raise_exception=True)
 def actualizar_categoria(request, _id):
     try:
         dato_old = get_object_or_404(Categoria, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         form = CategoriaForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -212,12 +226,13 @@ def actualizar_categoria(request, _id):
         }
         return render(request, 'categorias/actualizar_categoria.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.delete_categoria', raise_exception=True)
 def borrar_categoria(request, _id):
     try:
         data = get_object_or_404(Categoria, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         data.delete()
         return redirect('/categorias')
@@ -228,7 +243,7 @@ def borrar_categoria(request, _id):
 #
 # CRUD de los Activos
 #
-#@login_required(login_url="login")
+@login_required(login_url="login")
 @permission_required('cetaf.view_activo', raise_exception=True)
 def lts_activo(request):
     lista = Activo.objects.all()
@@ -238,6 +253,7 @@ def lts_activo(request):
 
     return render(request, 'activos/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('cetaf.add_activo', raise_exception=True)
 def crear_activo(request):
     if request.method == 'POST':
@@ -252,21 +268,23 @@ def crear_activo(request):
         }
         return render(request, 'activos/crear_activo.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_activo', raise_exception=True)
 def detalle_activo(request, _id):
     try:
         activo = Activo.objects.get(pk = _id)
     except Activo.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'activos/detalle_activo.html', {'activo': activo})
 
+@login_required(login_url="login")
 @permission_required('cetaf.change_activo', raise_exception=True)
 def actualizar_activo(request, _id):
     try:
         dato_old = get_object_or_404(Activo, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         form = ActivoForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -279,12 +297,13 @@ def actualizar_activo(request, _id):
         }
         return render(request, 'activos/actualizar_activo.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.delete_activo', raise_exception=True)
 def borrar_activo(request, _id):
     try:
         data = get_object_or_404(Activo, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         data.delete()
         return redirect('/activos')
@@ -295,7 +314,7 @@ def borrar_activo(request, _id):
 #
 # CRUD de las asignaciones
 #
-#@login_required(login_url="login")
+@login_required(login_url="login")
 @permission_required('cetaf.view_asignacion', raise_exception=True)
 def lts_asignacion(request):
     lista = Asignacion.objects.all()
@@ -305,6 +324,7 @@ def lts_asignacion(request):
 
     return render(request, 'asignaciones/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('cetaf.add_asignacion', raise_exception=True)
 def crear_asignacion(request):
     if request.method == 'POST':
@@ -322,21 +342,23 @@ def crear_asignacion(request):
         }
         return render(request, 'asignaciones/crear_asignacion.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_asignacion', raise_exception=True)
 def detalle_asignacion(request, _id):
     try:
         asignacion = Asignacion.objects.get(pk = _id)
     except Asignacion.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'asignaciones/detalle_asignacion.html', {'asignacion': asignacion})
 
+@login_required(login_url="login")
 @permission_required('cetaf.change_asignacion', raise_exception=True)
 def actualizar_asignacion(request, _id):
     try:
         dato_old = get_object_or_404(Asignacion, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         form = AsignacionForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -352,12 +374,13 @@ def actualizar_asignacion(request, _id):
         }
         return render(request, 'asignaciones/actualizar_asignacion.html', contexto)
 
+@login_required(login_url="login")
 @permission_required('cetaf.delete_asignacion', raise_exception=True)
 def borrar_asignacion(request, _id):
     try:
         data = get_object_or_404(Asignacion, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == 'POST':
         data.delete()
         return redirect('/asignaciones')
@@ -379,7 +402,7 @@ def crear_usuarios(request):
         form = UserCreationForm()
     return render(request,'usuarios/crear_usuario.html',{'form':form})
 
-#@login_required(login_url="login")
+@login_required(login_url="login")
 @permission_required('auth.change_user', raise_exception=True)
 def editar_usuarios(request):
     if request.method == "POST":
@@ -428,6 +451,7 @@ def cambiar_password(request):
 #
 # Tipos de usuario / Grupos [Permisos]
 #
+@login_required(login_url="login")
 @permission_required('auth.view_user', raise_exception=True)
 def lts_usuarios(request):
     lista = User.objects.all()
@@ -437,6 +461,7 @@ def lts_usuarios(request):
 
     return render(request, 'tipo_usuarios/index.html', {'obj_pagina': obj_pagina})
 
+@login_required(login_url="login")
 @permission_required('auth.add_user', raise_exception=True)
 def crear_grupo(request):
     if request.method == "POST":
@@ -452,12 +477,13 @@ def crear_grupo(request):
         form = GruposForm()
     return render(request, 'tipo_usuarios/crear_grupos.html', {'form':form})
 
+@login_required(login_url="login")
 @permission_required('auth.change_user', raise_exception=True)
 def actualizar_permisos(request, _id):
     try:
         dato_old = get_object_or_404(User, id = _id)
     except Exception:
-        raise Http404('El registro no existe')
+        return render(request, '404.html', status=404)
     if request.method == "POST":
         form = UsuarioForm(request.POST, instance=dato_old)
         if form.is_valid():
@@ -475,21 +501,25 @@ def actualizar_permisos(request, _id):
 #
 # Consultas / Reportes
 #
-#@login_required(login_url="login")
+@login_required(login_url="login")
 def lts_consulta(request):
-    lista = Asignacion.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+    return render(request, 'consultas/index.html')
 
-    return render(request, 'consultas/index.html', {'obj_pagina': obj_pagina})
+def filtrar_consulta(request):
+    consulta = request.GET.get('buscar')
+    lts_filtrada = Asignacion.objects.filter(
+        Q(nombre_activo__nombre__icontains=consulta) | Q(persona_responsable__icontains=consulta) | Q(nombre_activo__categoria__nombre__icontains=consulta)
+        | Q(sede_asignada__nombre__icontains=consulta) | Q(ambiente_asignado__nombre__icontains=consulta)
+    )
+    return render(request, 'consultas/index.html', {'lts_filtrada': lts_filtrada})
 
+@login_required(login_url="login")
 @permission_required('cetaf.view_consulta', raise_exception=True)
 def detalle_consulta(request, _id):
     try:
         consulta = Asignacion.objects.get(pk = _id)
     except Asignacion.DoesNotExist:
-        raise Http404('Este registro no existe')
+        return render(request, '404.html', status=404)
 
     return render(request, 'consultas/detalle_consulta.html', {'consulta': consulta})
 
