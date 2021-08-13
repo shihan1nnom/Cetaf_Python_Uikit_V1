@@ -12,6 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.db.models import Q
 from django.views.generic.list import ListView
+import csv
 
 
 #
@@ -502,11 +503,18 @@ def actualizar_permisos(request, _id):
 # Consultas / Reportes
 #
 @login_required(login_url="login")
+@permission_required('cetaf.view_consulta', raise_exception=True)
+
 def lts_consulta(request):
     return render(request, 'consultas/index.html')
 
+
+@login_required(login_url="login")
+@permission_required('cetaf.view_consulta', raise_exception=True)
+
 def filtrar_consulta(request):
     consulta = request.GET.get('buscar')
+    global lts_filtrada
     lts_filtrada = Asignacion.objects.filter(
         Q(nombre_activo__nombre__icontains=consulta) | Q(persona_responsable__icontains=consulta) | Q(nombre_activo__categoria__nombre__icontains=consulta)
         | Q(sede_asignada__nombre__icontains=consulta) | Q(ambiente_asignado__nombre__icontains=consulta)
@@ -522,6 +530,26 @@ def detalle_consulta(request, _id):
         return render(request, '404.html', status=404)
 
     return render(request, 'consultas/detalle_consulta.html', {'consulta': consulta})
+
+
+@login_required(login_url="login")
+@permission_required('cetaf.view_consulta', raise_exception=True)
+
+def exportar_asignacion(request):
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="Asignaciones.csv"'},
+    )
+
+    escribir = csv.writer(response)
+    escribir.writerow(['Nombre activo', 'Persona responsable', 'Sede asignado', 'Ambiente asignado', 'Fecha inicio', 'fecha fin', 'descripcion'])
+    asignaciones = lts_filtrada.values_list('nombre_activo__nombre', 'persona_responsable', 'sede_asignada', 'ambiente_asignado', 'fecha_inicio', 'fecha_fin', 'descripcion')
+
+    for asignacion in asignaciones:
+        escribir.writerow(asignacion)
+
+    return response
+
 
 #
 # Login

@@ -37,7 +37,7 @@ class Activo(models.Model):
     garantia = models.CharField(max_length=200)
     fecha_puesto_servicio = models.DateField()
     descripcion = models.TextField()
-    vida_util = models.CharField(max_length=200)
+    vida_util = models.FloatField(default=0)
     valor_residual = models.IntegerField(default=0)
 
     def __str__(self):

@@ -50,6 +50,7 @@ urlpatterns = [
     path('consultas/', views.lts_consulta, name='lts_consulta'),
     path('consultas/filtrada', views.filtrar_consulta, name='filtrar_consulta'),
     path('consultas/<int:_id>/', views.detalle_consulta, name='detalle_consulta'),
+    path('consultas/exportar', views.exportar_asignacion, name='exportar_asignacion'),
 
     path('login/', views.iniciar_sesion, name="login"),
     path('logout', views.cerrar_sesion, name='logout'),
