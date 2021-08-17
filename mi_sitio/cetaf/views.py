@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404, HttpResponse, HttpResponseNotFound
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.models import User, Group
-from .forms import SedeForm, AmbienteForm, CategoriaForm, ActivoForm, AsignacionForm, UsuarioForm, PerfilForm, GruposForm
+from .forms import *
 from django.core.paginator import Paginator
+from django.utils.decorators import method_decorator
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -11,7 +12,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.db.models import Q
-from django.views.generic.list import ListView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views import View
+from django.urls import reverse_lazy
 import csv
 
 
@@ -102,72 +106,97 @@ def borrar_sede(request, _id):
 #
 # CRUD de las Ambientes
 #
-@login_required(login_url="login")
-@permission_required('cetaf.view_ambiente', raise_exception=True)
-def lts_ambiente(request):
-    lista = Ambiente.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+#@login_required(login_url="login")
+#@permission_required('cetaf.view_ambiente', raise_exception=True)
+#def lts_ambiente(request):
+    #lista = Ambiente.objects.all()
+    #paginador = Paginator(lista, 10)
+    #num_pagina = request.GET.get('page')
+    #obj_pagina = paginador.get_page(num_pagina)
 
-    return render(request, 'ambientes/index.html', {'obj_pagina': obj_pagina})
+    #return render(request, 'ambientes/index.html', {'obj_pagina': obj_pagina})
 
-@login_required(login_url="login")
-@permission_required('cetaf.add_ambiente', raise_exception=True)
-def crear_ambiente(request):
-    if request.method == 'POST':
-        form = AmbienteForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/ambientes')
-    else:
-        form = AmbienteForm()
-        contexto = {
-            'form': form
-        }
-        return render(request, 'ambientes/crear_ambiente.html', contexto)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_ambiente', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_ambiente', raise_exception=True)
-def detalle_ambiente(request, _id):
-    try:
-        ambiente = Ambiente.objects.get(pk = _id)
-    except Ambiente.DoesNotExist:
-        return render(request, '404.html', status=404)
+class lts_ambiente(ListView):
+    model = Ambiente
+    template_name = 'ambientes/index.html'
+    paginate_by = 10
 
-    return render(request, 'ambientes/detalle_ambiente.html', {'ambiente': ambiente})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
 
-@login_required(login_url="login")
-@permission_required('cetaf.change_ambiente', raise_exception=True)
-def actualizar_ambiente(request, _id):
-    try:
-        dato_old = get_object_or_404(Ambiente, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        form = AmbienteForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/ambientes/{_id}/')
-    else:
-        form = AmbienteForm(instance=dato_old)
-        contexto = {
-            'form': form
-        }
-        return render(request, 'ambientes/actualizar_ambiente.html', contexto)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.add_ambiente', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.delete_ambiente', raise_exception=True)
-def borrar_ambiente(request, _id):
-    try:
-        data = get_object_or_404(Ambiente, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        data.delete()
-        return redirect('/ambientes')
-    else:
-        return render(request, 'ambientes/borrar_ambiente.html', {'ambiente': data})
+class crear_ambiente(CreateView):
+    model = Ambiente
+    form_class = AmbienteForm
+    template_name = 'ambientes/crear_ambiente.html'
+    success_url = reverse_lazy('lts_ambiente')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        return super().form_invalid(form)
+
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_ambiente', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class detalle_ambiente(DetailView):
+    model = Ambiente
+    template_name = 'ambientes/detalle_ambiente.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.change_ambiente', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_ambiente(UpdateView):
+    model = Ambiente
+    form_class = AmbienteForm
+    template_name = 'ambientes/actualizar_ambiente.html'
+    success_url = reverse_lazy('lts_ambiente')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_ambiente', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class borrar_ambiente(DeleteView):
+    model = Ambiente
+    template_name = 'ambientes/borrar_ambiente.html'
+    success_url = reverse_lazy('lts_ambiente')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, "Elemento eliminado con exito")
+        return super().delete(request, *args, **kwargs)
+
 
 
 #

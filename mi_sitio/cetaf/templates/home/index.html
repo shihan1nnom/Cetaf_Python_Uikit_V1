@@ -54,7 +54,7 @@
                     <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
                     <li class="uk-nav-divider" style="margin-top:30px"></li>
                     <li class="uk-active"><a><span>Email:</span></a></li>
-                    {% if user.username %}
+                    {% if user.is_authenticated %}
                         <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
                     {% else %}
                         <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>
@@ -109,7 +109,7 @@
                         <li><a href="#" class="deshabilitar"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
                         <li class="uk-nav-divider" style="margin-top:30px"></li>
                         <li class="uk-active"><a><span>Email:</span></a></li>
-                        {% if user.username %}
+                        {% if user.is_authenticated %}
                           <li><a href="{% url 'logout' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-out"></span> Cerrar Sesion</a></li>
                         {% else %}
                           <li><a href="{% url 'login' %}"><span class="uk-margin-small-right" uk-icon="icon: sign-in"></span> Iniciar Sesion</a></li>

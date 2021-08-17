@@ -1,6 +1,8 @@
 from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 from . import views, forms
+from .views import *
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -23,11 +25,11 @@ urlpatterns = [
     path('sedes/<int:_id>/actualizar', views.actualizar_sede, name='actualizar_sede'),
     path('sedes/<int:_id>/borrar', views.borrar_sede, name='borrar_sede'),
 
-    path('ambientes/', views.lts_ambiente, name='lts_ambiente'),
-    path('ambientes/<int:_id>/', views.detalle_ambiente, name='detalle_ambiente'),
-    path('ambientes/crear', views.crear_ambiente, name='crear_ambiente'),
-    path('ambientes/<int:_id>/actualizar', views.actualizar_ambiente, name='actualizar_ambiente'),
-    path('ambientes/<int:_id>/borrar', views.borrar_ambiente, name='borrar_ambiente'),
+    path('ambientes/', lts_ambiente.as_view(), name='lts_ambiente'),
+    path('ambientes/<int:pk>/', detalle_ambiente.as_view(), name='detalle_ambiente'),
+    path('ambientes/crear', crear_ambiente.as_view(), name='crear_ambiente'),
+    path('ambientes/<int:pk>/actualizar', actualizar_ambiente.as_view(), name='actualizar_ambiente'),
+    path('ambientes/<int:pk>/borrar', borrar_ambiente.as_view(), name='borrar_ambiente'),
 
     path('categorias/', views.lts_categoria, name='lts_categoria'),
     path('categorias/<int:_id>/', views.detalle_categoria, name='detalle_categoria'),

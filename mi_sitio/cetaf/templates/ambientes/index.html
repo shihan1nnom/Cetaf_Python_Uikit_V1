@@ -7,32 +7,45 @@
 <div class="uk-card uk-card-default uk-card-body uk-align-center uk-box-shadow-xlarge uk-margin-small" style="border-radius: 30px 10px;">
     <h3 class="uk-card-title uk-text-bold">AMBIENTES</h3>
     {% block contenido_ambiente %}
+        {% if messages %}
+            <div style="background: black; height: 70px; border-radius: 30px 10px; margin-bottom: 20px">
+                <ul class="messages" style="padding-top: 25px">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: white">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
             <li class="uk-button uk-button-default uk-button-small uk-box-shadow-xlarge" style="border-radius: 30px 10px; margin-left: 30px"><a class="uk-text-danger" href="{% url 'crear_ambiente' %}"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Crear</a></li>
         </ul>
         <ul class="uk-list uk-list-striped">
-            {% for ambiente in obj_pagina %}
+            {% for ambiente in page_obj %}
                 <li><a href="{% url 'detalle_ambiente' ambiente.id %}" uk-toggle>|+| {{ambiente.nombre}}</a></li>
             {% endfor %}
         </ul>
         <div>
-          <span>
-              <ul class="uk-pagination uk-flex-center" uk-margin>
-                  {% if obj_pagina.has_previous %}
-                  <li><a href="?page=1">&laquo; Primera</a></li>
-                  <li><a href="?page={{ obj_pagina.previous_page_number }}">Anterior</a></li>
-                  {% endif %}
-
-                  <span>
-                      <li class="uk-disabled"><span>Pagina {{ obj_pagina.number }} de {{ obj_pagina.paginator.num_pages }}.</span></li>
-                  </span>
-
-                  {% if obj_pagina.has_next %}
-                      <li><a href="?page={{ obj_pagina.next_page_number }}">Siguiente</a></li>
-                      <li><a href="?page={{ obj_pagina.paginator.num_pages }}">ultima &raquo;</a></li>
-                  {% endif %}
-              </ul>
-          </span>
+            <span>
+                <ul class="uk-pagination uk-link-heading uk-flex-center" uk-margin>
+                    {% if is_paginated %}
+                        {% if page_obj.has_previous %}
+                        <li><a href="?page=1">Primera</a></li>
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><span uk-pagination-previous></span></a></li>
+                        {% endif %}
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                        {% if page_obj.number == i %}
+                            <li><span>{{ i }}</span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}"><span uk-pagination-next></span></a></li>
+                        <li><a href="?page={{ page_obj.paginator.num_pages }}">ultima</a></li>
+                    {% endif %}
+                        </ul>
+            </span>
         </div>
     {% endblock contenido_ambiente %}
 </div>
