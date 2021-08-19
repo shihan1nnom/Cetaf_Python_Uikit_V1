@@ -35,87 +35,90 @@ def ayuda(request):
 #
 # CRUD de las Sedes
 #
-@login_required(login_url="login")
-@permission_required('cetaf.view_sede', raise_exception=True)
-def lts_sedes(request):
-    lista = Sede.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_sede', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-    return render(request, 'sedes/index.html', {'obj_pagina': obj_pagina})
+class lts_sedes(ListView):
+    model = Sede
+    template_name = 'sedes/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('cetaf.add_sede', raise_exception=True)
-def crear_sede(request):
-    if request.method == 'POST':
-        form = SedeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/sedes')
-    else:
-        form = SedeForm()
-        contexto = {
-            'form': form
-        }
-        return render(request, 'sedes/crear_sede.html', contexto)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_sede', raise_exception=True)
-def detalle_sede(request, _id):
-    try:
-        sede = Sede.objects.get(pk = _id)
-    except Sede.DoesNotExist:
-        return render(request, '404.html', status=404)
 
-    return render(request, 'sedes/detalle_sede.html', {'sede': sede})
+decoradores = [login_required(login_url="login"), permission_required('cetaf.add_sede', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.change_sede', raise_exception=True)
-def actualizar_sede(request, _id):
-    try:
-        dato_old = get_object_or_404(Sede, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        form = SedeForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/sedes/{_id}/')
-    else:
-        form = SedeForm(instance=dato_old)
-        contexto = {
-            'form': form
-        }
-        return render(request, 'sedes/actualizar_sede.html', contexto)
+class crear_sede(CreateView):
+    model = Sede
+    form_class = SedeForm
+    template_name = 'sedes/crear_sede.html'
+    success_url = reverse_lazy('lts_sedes')
 
-@login_required(login_url="login")
-@permission_required('cetaf.delete_sede', raise_exception=True)
-def borrar_sede(request, _id):
-    try:
-        data = get_object_or_404(Sede, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        data.delete()
-        return redirect('/sedes')
-    else:
-        return render(request, 'sedes/borrar_sede.html', {'sede': data})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_sede', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class detalle_sede(DetailView):
+    model = Sede
+    template_name = 'sedes/detalle_sede.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.change_sede', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_sede(UpdateView):
+    model = Sede
+    form_class = SedeForm
+    template_name = 'sedes/actualizar_sede.html'
+    success_url = reverse_lazy('lts_sedes')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_sede', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class borrar_sede(DeleteView):
+    model = Sede
+    template_name = 'sedes/borrar_sede.html'
+    success_url = reverse_lazy('lts_sedes')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, "Elemento eliminado con exito")
+        return super().delete(request, *args, **kwargs)
 
 
 #
 # CRUD de las Ambientes
 #
-#@login_required(login_url="login")
-#@permission_required('cetaf.view_ambiente', raise_exception=True)
-#def lts_ambiente(request):
-    #lista = Ambiente.objects.all()
-    #paginador = Paginator(lista, 10)
-    #num_pagina = request.GET.get('page')
-    #obj_pagina = paginador.get_page(num_pagina)
-
-    #return render(request, 'ambientes/index.html', {'obj_pagina': obj_pagina})
-
 decoradores = [login_required(login_url="login"), permission_required('cetaf.view_ambiente', raise_exception=True)]
 @method_decorator(decoradores, name='dispatch')
 
@@ -198,224 +201,256 @@ class borrar_ambiente(DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-
 #
 # CRUD de las Categorias
 #
-@login_required(login_url="login")
-@permission_required('cetaf.view_categoria', raise_exception=True)
-def lts_categoria(request):
-    lista = Categoria.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_categoria', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-    return render(request, 'categorias/index.html', {'obj_pagina': obj_pagina})
+class lts_categoria(ListView):
+    model = Categoria
+    template_name = 'categorias/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('cetaf.add_categoria', raise_exception=True)
-def crear_categoria(request):
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/categorias')
-    else:
-        form = CategoriaForm()
-        contexto = {
-            'form': form
-        }
-        return render(request, 'categorias/crear_categoria.html', contexto)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_categoria', raise_exception=True)
-def detalle_categoria(request, _id):
-    try:
-        categoria = Categoria.objects.get(pk = _id)
-    except Categoria.DoesNotExist:
-        return render(request, '404.html', status=404)
 
-    return render(request, 'categorias/detalle_categoria.html', {'categoria': categoria})
+decoradores = [login_required(login_url="login"), permission_required('cetaf.add_categoria', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.change_categoria', raise_exception=True)
-def actualizar_categoria(request, _id):
-    try:
-        dato_old = get_object_or_404(Categoria, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/categorias/{_id}/')
-    else:
-        form = CategoriaForm(instance=dato_old)
-        contexto = {
-            'form': form
-        }
-        return render(request, 'categorias/actualizar_categoria.html', contexto)
+class crear_categoria(CreateView):
+    model = Categoria
+    form_class = CategoriaForm
+    template_name = 'categorias/crear_categoria.html'
+    success_url = reverse_lazy('lts_categoria')
 
-@login_required(login_url="login")
-@permission_required('cetaf.delete_categoria', raise_exception=True)
-def borrar_categoria(request, _id):
-    try:
-        data = get_object_or_404(Categoria, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        data.delete()
-        return redirect('/categorias')
-    else:
-        return render(request, 'categorias/borrar_categoria.html', {'categoria': data})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_categoria', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class detalle_categoria(DetailView):
+    model = Categoria
+    template_name = 'categorias/detalle_categoria.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.change_categoria', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_categoria(UpdateView):
+    model = Categoria
+    form_class = CategoriaForm
+    template_name = 'categorias/actualizar_categoria.html'
+    success_url = reverse_lazy('lts_categoria')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_categoria', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class borrar_categoria(DeleteView):
+    model = Categoria
+    template_name = 'categorias/borrar_categoria.html'
+    success_url = reverse_lazy('lts_categoria')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, "Elemento eliminado con exito")
+        return super().delete(request, *args, **kwargs)
 
 
 #
 # CRUD de los Activos
 #
-@login_required(login_url="login")
-@permission_required('cetaf.view_activo', raise_exception=True)
-def lts_activo(request):
-    lista = Activo.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_activo', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-    return render(request, 'activos/index.html', {'obj_pagina': obj_pagina})
+class lts_activo(ListView):
+    model = Activo
+    template_name = 'activos/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('cetaf.add_activo', raise_exception=True)
-def crear_activo(request):
-    if request.method == 'POST':
-        form = ActivoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/activos')
-    else:
-        form = ActivoForm()
-        contexto = {
-            'form': form
-        }
-        return render(request, 'activos/crear_activo.html', contexto)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_activo', raise_exception=True)
-def detalle_activo(request, _id):
-    try:
-        activo = Activo.objects.get(pk = _id)
-    except Activo.DoesNotExist:
-        return render(request, '404.html', status=404)
 
-    return render(request, 'activos/detalle_activo.html', {'activo': activo})
+decoradores = [login_required(login_url="login"), permission_required('cetaf.add_activo', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.change_activo', raise_exception=True)
-def actualizar_activo(request, _id):
-    try:
-        dato_old = get_object_or_404(Activo, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        form = ActivoForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/activos/{_id}/')
-    else:
-        form = ActivoForm(instance=dato_old)
-        contexto = {
-            'form': form
-        }
-        return render(request, 'activos/actualizar_activo.html', contexto)
+class crear_activo(CreateView):
+    model = Activo
+    form_class = ActivoForm
+    template_name = 'activos/crear_activo.html'
+    success_url = reverse_lazy('lts_activo')
 
-@login_required(login_url="login")
-@permission_required('cetaf.delete_activo', raise_exception=True)
-def borrar_activo(request, _id):
-    try:
-        data = get_object_or_404(Activo, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        data.delete()
-        return redirect('/activos')
-    else:
-        return render(request, 'activos/borrar_activo.html', {'activo': data})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_activo', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class detalle_activo(DetailView):
+    model = Activo
+    template_name = 'activos/detalle_activo.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.change_activo', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_activo(UpdateView):
+    model = Activo
+    form_class = ActivoForm
+    template_name = 'activos/actualizar_activo.html'
+    success_url = reverse_lazy('lts_activo')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_activo', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class borrar_activo(DeleteView):
+    model = Activo
+    template_name = 'activos/borrar_activo.html'
+    success_url = reverse_lazy('lts_activo')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, "Elemento eliminado con exito")
+        return super().delete(request, *args, **kwargs)
 
 
 #
 # CRUD de las asignaciones
 #
-@login_required(login_url="login")
-@permission_required('cetaf.view_asignacion', raise_exception=True)
-def lts_asignacion(request):
-    lista = Asignacion.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_asignacion', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-    return render(request, 'asignaciones/index.html', {'obj_pagina': obj_pagina})
+class lts_asignacion(ListView):
+    model = Asignacion
+    template_name = 'asignaciones/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('cetaf.add_asignacion', raise_exception=True)
-def crear_asignacion(request):
-    if request.method == 'POST':
-        form = AsignacionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/asignaciones')
-        else:
-            messages.info(request, 'El elemento ya ha sido asignado')
-            return redirect('/asignaciones/crear')
-    else:
-        form = AsignacionForm()
-        contexto = {
-            'form': form
-        }
-        return render(request, 'asignaciones/crear_asignacion.html', contexto)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_asignacion', raise_exception=True)
-def detalle_asignacion(request, _id):
-    try:
-        asignacion = Asignacion.objects.get(pk = _id)
-    except Asignacion.DoesNotExist:
-        return render(request, '404.html', status=404)
 
-    return render(request, 'asignaciones/detalle_asignacion.html', {'asignacion': asignacion})
+decoradores = [login_required(login_url="login"), permission_required('cetaf.add_asignacion', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('cetaf.change_asignacion', raise_exception=True)
-def actualizar_asignacion(request, _id):
-    try:
-        dato_old = get_object_or_404(Asignacion, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        form = AsignacionForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/asignaciones/{_id}/')
-        else:
-            messages.info(request, 'El elemento ya ha sido asignado')
-            return redirect(f'/asignaciones/{_id}/actualizar')
-    else:
-        form = AsignacionForm(instance=dato_old)
-        contexto = {
-            'form': form
-        }
-        return render(request, 'asignaciones/actualizar_asignacion.html', contexto)
+class crear_asignacion(CreateView):
+    model = Asignacion
+    form_class = AsignacionForm
+    template_name = 'asignaciones/crear_asignacion.html'
+    success_url = reverse_lazy('lts_asignacion')
 
-@login_required(login_url="login")
-@permission_required('cetaf.delete_asignacion', raise_exception=True)
-def borrar_asignacion(request, _id):
-    try:
-        data = get_object_or_404(Asignacion, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == 'POST':
-        data.delete()
-        return redirect('/asignaciones')
-    else:
-        return render(request, 'asignaciones/borrar_asignacion.html', {'asignacion': data})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.view_asignacion', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class detalle_asignacion(DetailView):
+    model = Asignacion
+    template_name = 'asignaciones/detalle_asignacion.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.change_asignacion', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_asignacion(UpdateView):
+    model = Asignacion
+    form_class = AsignacionForm
+    template_name = 'asignaciones/actualizar_asignacion.html'
+    success_url = reverse_lazy('lts_asignacion')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        return super().form_invalid(form)
+
+
+decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_asignacion', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class borrar_asignacion(DeleteView):
+    model = Asignacion
+    template_name = 'asignaciones/borrar_asignacion.html'
+    success_url = reverse_lazy('lts_asignacion')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, "Elemento eliminado con exito")
+        return super().delete(request, *args, **kwargs)
 
 #
 # CRUD Usuarios

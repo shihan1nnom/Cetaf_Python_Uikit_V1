@@ -9,7 +9,7 @@
     {% block contenido_ambiente %}
         {% if messages %}
             <div style="background: black; height: 70px; border-radius: 30px 10px; margin-bottom: 20px">
-                <ul class="messages" style="padding-top: 25px">
+                <ul class="uk-list uk-list-hyphen" style="padding-top: 25px">
                     {% for message in messages %}
                     <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: white">{{ message }}</li>
                     {% endfor %}
