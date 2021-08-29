@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.models import User, Group
+from django.contrib.admin.models import *
+from django.contrib.admin.options import *
 from .forms import *
 from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
@@ -12,11 +14,12 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.db.models import Q
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views import View
 from django.urls import reverse_lazy
 import csv
+
 
 
 #
@@ -61,11 +64,29 @@ class crear_sede(CreateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crea nuevo elemento')
         return super().form_invalid(form)
+
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.view_sede', raise_exception=True)]
@@ -93,11 +114,29 @@ class actualizar_sede(UpdateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
         return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_sede', raise_exception=True)]
@@ -113,7 +152,26 @@ class borrar_sede(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.info(self.request, "Elemento eliminado con exito")
+        obj = super(borrar_sede, self).get_object()
+        obj_display = str(obj)
+        self.log_deletion(self.request, obj, obj_display)
         return super().delete(request, *args, **kwargs)
+
+    def log_deletion(self, request, object, object_repr):
+        """
+        Log that an object will be deleted. Note that this method must be
+        called before the deletion.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import DELETION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=object_repr,
+            action_flag=DELETION,
+        )
 
 
 #
@@ -145,11 +203,29 @@ class crear_ambiente(CreateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crea nuevo elemento')
         return super().form_invalid(form)
+
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
 
 
 
@@ -178,11 +254,29 @@ class actualizar_ambiente(UpdateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
         return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_ambiente', raise_exception=True)]
@@ -198,7 +292,26 @@ class borrar_ambiente(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.info(self.request, "Elemento eliminado con exito")
+        obj = super(borrar_ambiente, self).get_object()
+        obj_display = str(obj)
+        self.log_deletion(self.request, obj, obj_display)
         return super().delete(request, *args, **kwargs)
+
+    def log_deletion(self, request, object, object_repr):
+        """
+        Log that an object will be deleted. Note that this method must be
+        called before the deletion.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import DELETION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=object_repr,
+            action_flag=DELETION,
+        )
 
 
 #
@@ -230,11 +343,31 @@ class crear_categoria(CreateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crea nuevo elemento')
         return super().form_invalid(form)
+
+    
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
+
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.view_categoria', raise_exception=True)]
@@ -262,11 +395,30 @@ class actualizar_categoria(UpdateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
         return super().form_invalid(form)
+
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )    
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_categoria', raise_exception=True)]
@@ -282,7 +434,26 @@ class borrar_categoria(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.info(self.request, "Elemento eliminado con exito")
+        obj = super(borrar_categoria, self).get_object()
+        obj_display = str(obj)
+        self.log_deletion(self.request, obj, obj_display)
         return super().delete(request, *args, **kwargs)
+
+    def log_deletion(self, request, object, object_repr):
+        """
+        Log that an object will be deleted. Note that this method must be
+        called before the deletion.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import DELETION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=object_repr,
+            action_flag=DELETION,
+        )
 
 
 #
@@ -314,11 +485,29 @@ class crear_activo(CreateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crea nuevo elemento')
         return super().form_invalid(form)
+
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.view_activo', raise_exception=True)]
@@ -346,11 +535,29 @@ class actualizar_activo(UpdateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
         return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_activo', raise_exception=True)]
@@ -366,8 +573,35 @@ class borrar_activo(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.info(self.request, "Elemento eliminado con exito")
+        obj = super(borrar_activo, self).get_object()
+        obj_display = str(obj)
+        self.log_deletion(self.request, obj, obj_display)
         return super().delete(request, *args, **kwargs)
 
+    def log_deletion(self, request, object, object_repr):
+        """
+        Log that an object will be deleted. Note that this method must be
+        called before the deletion.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import DELETION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=object_repr,
+            action_flag=DELETION,
+        )
+
+
+#
+# Registro Y monitoreo
+#
+class historial(ListView):
+    model = LogEntry
+    template_name = 'logs/index.html'
+    paginate_by = 10
 
 #
 # CRUD de las asignaciones
@@ -398,11 +632,29 @@ class crear_asignacion(CreateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crear nuevo elemento')
         return super().form_invalid(form)
+
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.view_asignacion', raise_exception=True)]
@@ -430,11 +682,29 @@ class actualizar_asignacion(UpdateView):
 
     def form_valid(self, form):
         messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
         return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
 
 
 decoradores = [login_required(login_url="login"), permission_required('cetaf.delete_asignacion', raise_exception=True)]
@@ -450,117 +720,319 @@ class borrar_asignacion(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.info(self.request, "Elemento eliminado con exito")
+        obj = super(borrar_asignacion, self).get_object()
+        obj_display = str(obj)
+        self.log_deletion(self.request, obj, obj_display)
         return super().delete(request, *args, **kwargs)
+    
+    def log_deletion(self, request, object, object_repr):
+        """
+        Log that an object will be deleted. Note that this method must be
+        called before the deletion.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import DELETION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=object_repr,
+            action_flag=DELETION,
+        )
 
 #
 # CRUD Usuarios
 #
-@login_required(login_url="login")
-@permission_required('auth.add_user', raise_exception=True)
-def crear_usuarios(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = UserCreationForm()
-    return render(request,'usuarios/crear_usuario.html',{'form':form})
+decoradores = [login_required(login_url="login"), permission_required('auth.add_user', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-@login_required(login_url="login")
-@permission_required('auth.change_user', raise_exception=True)
-def editar_usuarios(request):
-    if request.method == "POST":
-        form = UsuarioForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Actualizacion realizada con exito')
-            return redirect(f'/usuarios/editar')
-        else:
-            messages.info(request, 'Error en guardado')
-            return redirect(f'/usuarios/editar') 
-    else:
-        form = UsuarioForm(instance=request.user)
-    return render(request, 'usuarios/editar_usuario.html', {'form':form})
+class crear_usuarios(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'usuarios/crear_usuario.html'
+    success_url = reverse_lazy('index')
 
-@login_required(login_url="login")
-def editar_perfil(request):
-    if request.method == "POST":
-        form = PerfilForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Actualizacion realizada con exito')
-            return redirect(f'/usuarios/editar_perfil')
-        else:
-            messages.info(request, 'Error en guardado')
-            return redirect(f'/usuarios/editar_perfil') 
-    else:
-        form = PerfilForm(instance=request.user)
-    return render(request, 'usuarios/editar_perfil.html', {'form':form})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-def cambiar_password(request):
-    if request.method == "POST":
-        form = SetPasswordForm(request.user, request.POST)
+    def form_valid(self, form):
+        messages.info(self.request, "Usuario creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el usuario")
+        self.log_addition(self.request, form.instance, 'Error al crear nuevo elemento')
+        return super().form_invalid(form)
+    
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
+
+
+decoradores = [login_required(login_url="login"), permission_required('auth.change_user', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class editar_usuarios(FormView):
+    model = User
+    form_class = UsuarioForm
+    template_name = 'usuarios/editar_usuario.html'
+    success_url = reverse_lazy('editar_usuarios')
+
+    def get(self, request,  *args, **kwargs):
+        form = self.form_class(instance=request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.info(request, 'Cambio de contraseña realizado con exito')
-            return redirect(f'/usuarios/password')
+            return self.form_valid(form)
         else:
-            messages.info(request, 'Error en el cambio de contraseña')
-            return redirect(f'/usuarios/password') 
-    else:
-        form = SetPasswordForm(request.user, request.POST)
-    return render(request, 'usuarios/password.html', {'form':form})
+            return self.form_invalid(form)
+        
+        return render(request, self.template_name, {'form': form})
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
+        return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
+
+
+decoradores = [login_required(login_url="login")]
+@method_decorator(decoradores, name='dispatch')
+
+class editar_perfil(FormView):
+    model = User
+    form_class = PerfilForm
+    template_name = 'usuarios/editar_perfil.html'
+    success_url = reverse_lazy('editar_perfil')
+
+    def get(self, request,  *args, **kwargs):
+        form = self.form_class(instance=request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+        return render(request, self.template_name, {'form': form})
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
+        return super().form_invalid(form)
+    
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
+
+
+decoradores = [login_required(login_url="login")]
+@method_decorator(decoradores, name='dispatch')
+
+class cambiar_password(FormView):
+    model = User
+    form_class = SetPasswordForm
+    template_name = 'usuarios/password.html'
+    success_url = reverse_lazy('cambiar_password')
+
+    def get(self, request,  *args, **kwargs):
+        form = self.form_class(request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+        return render(request, self.template_name, {'form': form})
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Cambio de contraseña con exito")
+        self.log_change(self.request, form.save(), 'Cambio de contraseña')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error en el cambio de contraseña")
+        self.log_change(self.request, form.save(), 'Error en cambio de contraseña')
+        return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
+
 
 #
 # Tipos de usuario / Grupos [Permisos]
 #
-@login_required(login_url="login")
-@permission_required('auth.view_user', raise_exception=True)
-def lts_usuarios(request):
-    lista = User.objects.all()
-    paginador = Paginator(lista, 10)
-    num_pagina = request.GET.get('page')
-    obj_pagina = paginador.get_page(num_pagina)
+decoradores = [login_required(login_url="login"), permission_required('auth.view_user', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
 
-    return render(request, 'tipo_usuarios/index.html', {'obj_pagina': obj_pagina})
+class lts_usuarios(ListView):
+    model = User
+    template_name = 'tipo_usuarios/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('auth.add_user', raise_exception=True)
-def crear_grupo(request):
-    if request.method == "POST":
-        form = GruposForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Grupo creado con exito')
-            return redirect(f'/tipo_usuarios/crear')
-        else:
-            messages.info(request, 'Error al crear el grupo')
-            return redirect(f'/tipo_usuarios/crear') 
-    else:
-        form = GruposForm()
-    return render(request, 'tipo_usuarios/crear_grupos.html', {'form':form})
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-@login_required(login_url="login")
-@permission_required('auth.change_user', raise_exception=True)
-def actualizar_permisos(request, _id):
-    try:
-        dato_old = get_object_or_404(User, id = _id)
-    except Exception:
-        return render(request, '404.html', status=404)
-    if request.method == "POST":
-        form = UsuarioForm(request.POST, instance=dato_old)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Actualizacion realizada con exito')
-            return redirect(f'/tipo_usuarios/{_id}/editar')
-        else:
-            messages.info(request, 'Error en guardado')
-            return redirect(f'/tipo_usuarios/{_id}/editar') 
-    else:
-        form = UsuarioForm(instance=dato_old)
-    return render(request, 'tipo_usuarios/actualizar_permisos.html', {'form':form})
+
+decoradores = [login_required(login_url="login"), permission_required('auth.add_group', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class crear_grupo(CreateView):
+    model = Group
+    form_class = GruposForm
+    template_name = 'tipo_usuarios/crear_grupos.html'
+    success_url = reverse_lazy('index')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento creado con exito")
+        self.log_addition(self.request, form.instance, 'Crea nuevo elemento')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al crear el elemento")
+        self.log_addition(self.request, form.instance, 'Error al crear nuevo elemento')
+        return super().form_invalid(form)
+
+    def log_addition(self, request, object, message):
+        """
+        Log that an object has been successfully added.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import ADDITION, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=ADDITION,
+            change_message=message,
+        )
+
+
+decoradores = [login_required(login_url="login"), permission_required('auth.change_user', raise_exception=True)]
+@method_decorator(decoradores, name='dispatch')
+
+class actualizar_permisos(UpdateView):
+    model = User
+    form_class = UsuarioForm
+    template_name = 'tipo_usuarios/actualizar_permisos.html'
+    success_url = reverse_lazy('lts_usuarios')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.info(self.request, "Elemento actualizado con exito")
+        self.log_change(self.request, form.instance, 'Actualiza elemento')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, "Error al actualizar el elemento")
+        self.log_change(self.request, form.instance, 'Error al actualizar elemento')
+        return super().form_invalid(form)
+
+    def log_change(self, request, object, message):
+        """
+        Log that an object has been successfully changed.
+
+        The default implementation creates an admin LogEntry object.
+        """
+        from django.contrib.admin.models import CHANGE, LogEntry
+        return LogEntry.objects.log_action(
+            user_id=request.user.pk,
+            content_type_id=get_content_type_for_model(object).pk,
+            object_id=object.pk,
+            object_repr=str(object),
+            action_flag=CHANGE,
+            change_message=message,
+        )
 
 
 #

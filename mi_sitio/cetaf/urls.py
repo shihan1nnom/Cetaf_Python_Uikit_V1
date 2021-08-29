@@ -10,14 +10,14 @@ urlpatterns = [
     path('ayuda/', views.ayuda, name='ayuda'),
 
     path('usuarios/', views.lts_usuarios, name='lts_usuarios'),
-    path('usuarios/crear', views.crear_usuarios, name='crear_usuarios'),
-    path('usuarios/editar', views.editar_usuarios, name='editar_usuarios'),
-    path('usuarios/editar_perfil', views.editar_perfil, name='editar_perfil'),
-    path('usuarios/password', views.cambiar_password, name='cambiar_password'),
+    path('usuarios/crear', crear_usuarios.as_view(), name='crear_usuarios'),
+    path('usuarios/editar', editar_usuarios.as_view(), name='editar_usuarios'),
+    path('usuarios/editar_perfil', editar_perfil.as_view(), name='editar_perfil'),
+    path('usuarios/password', cambiar_password.as_view(), name='cambiar_password'),
 
-    path('tipo_usuarios/', views.lts_usuarios, name='lts_usuarios'),
-    path('tipo_usuarios/crear', views.crear_grupo, name='crear_grupo'),
-    path('tipo_usuarios/<int:_id>/editar', views.actualizar_permisos, name='actualizar_permisos'),
+    path('tipo_usuarios/', lts_usuarios.as_view(), name='lts_usuarios'),
+    path('tipo_usuarios/crear', crear_grupo.as_view(), name='crear_grupo'),
+    path('tipo_usuarios/<int:pk>/editar', actualizar_permisos.as_view(), name='actualizar_permisos'),
 
     path('sedes/', lts_sedes.as_view(), name='lts_sedes'),
     path('sedes/<int:pk>/', detalle_sede.as_view(), name='detalle_sede'),
@@ -56,4 +56,6 @@ urlpatterns = [
 
     path('login/', views.iniciar_sesion, name="login"),
     path('logout', views.cerrar_sesion, name='logout'),
+
+    path('historial/', historial.as_view(), name='historial'),
 ]

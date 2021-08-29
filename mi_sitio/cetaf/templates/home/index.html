@@ -52,6 +52,7 @@
                     <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
                     <li><a href="{% url 'lts_consulta' %}"><span class="uk-margin-small-right" uk-icon="icon: database"></span> Consultas</a></li>
                     <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
+                    <li><a href="{% url 'historial' %}"><span class="uk-margin-small-right" uk-icon="icon: history"></span> Historico</a></li>
                     <li class="uk-nav-divider" style="margin-top:30px"></li>
                     <li class="uk-active"><a><span>Email:</span></a></li>
                     {% if user.is_authenticated %}
@@ -107,6 +108,7 @@
                         <li><a href="{% url 'lts_asignacion' %}"><span class="uk-margin-small-right" uk-icon="icon: plus-circle"></span> Asignaciones</a></li>
                         <li><a href="{% url 'lts_consulta' %}" ><span class="uk-margin-small-right" uk-icon="icon: database"></span> Consultas</a></li>
                         <li><a href="#" class="deshabilitar"><span class="uk-margin-small-right" uk-icon="icon: lock"></span> Copia Seguridad</a></li>
+                        <li><a href="{% url 'historial' %}"><span class="uk-margin-small-right" uk-icon="icon: history"></span> Historico</a></li>
                         <li class="uk-nav-divider" style="margin-top:30px"></li>
                         <li class="uk-active"><a><span>Email:</span></a></li>
                         {% if user.is_authenticated %}
