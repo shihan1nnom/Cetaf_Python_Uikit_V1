@@ -9,7 +9,6 @@
     {% block contenido_consulta %}
     <table class="uk-table uk-table-hover uk-table-divider">
         <form action="{% url 'filtrar_consulta' %}" method="get">
-            {% csrf_token %}
             <input class="uk-input" name="buscar" type="text" placeholder="Buscar elemento" style="border-radius: 10px 2px;">
             <p>El elmento a buscar se puede buscar mediante:</p>
             <ul class="uk-list uk-list-disc uk-list-primary">

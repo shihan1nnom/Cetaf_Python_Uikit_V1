@@ -50,12 +50,12 @@ urlpatterns = [
     path('asignaciones/<int:pk>/borrar', borrar_asignacion.as_view(), name='borrar_asignacion'),
 
     path('consultas/', views.lts_consulta, name='lts_consulta'),
-    path('consultas/filtrada', views.filtrar_consulta, name='filtrar_consulta'),
+    path('consultas/filtrada', filtrar_consulta.as_view(), name='filtrar_consulta'),
     path('consultas/<int:_id>/', views.detalle_consulta, name='detalle_consulta'),
     path('consultas/exportar', views.exportar_asignacion, name='exportar_asignacion'),
 
-    path('login/', views.iniciar_sesion, name="login"),
-    path('logout', views.cerrar_sesion, name='logout'),
+    path('login/', iniciar_sesion.as_view(), name="login"),
+    path('logout', cerrar_sesion.as_view(), name='logout'),
 
     path('historial/', historial.as_view(), name='historial'),
 ]

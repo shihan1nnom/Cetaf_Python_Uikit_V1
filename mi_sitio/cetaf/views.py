@@ -4,6 +4,7 @@ from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.models import User, Group
 from django.contrib.admin.models import *
 from django.contrib.admin.options import *
+from django.contrib.auth.views import LoginView, LogoutView
 from .forms import *
 from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
@@ -19,6 +20,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views import View
 from django.urls import reverse_lazy
 import csv
+from django.contrib.sites.shortcuts import get_current_site
 
 
 
@@ -1044,18 +1046,20 @@ class actualizar_permisos(UpdateView):
 def lts_consulta(request):
     return render(request, 'consultas/index.html')
 
+lts_filtrada = None
+class filtrar_consulta(ListView):
+    model = Asignacion
+    template_name = 'consultas/index.html'
+    paginate_by = 10
 
-@login_required(login_url="login")
-@permission_required('cetaf.view_consulta', raise_exception=True)
-
-def filtrar_consulta(request):
-    consulta = request.GET.get('buscar')
-    global lts_filtrada
-    lts_filtrada = Asignacion.objects.filter(
-        Q(nombre_activo__nombre__icontains=consulta) | Q(persona_responsable__icontains=consulta) | Q(nombre_activo__categoria__nombre__icontains=consulta)
-        | Q(sede_asignada__nombre__icontains=consulta) | Q(ambiente_asignado__nombre__icontains=consulta)
-    )
-    return render(request, 'consultas/index.html', {'lts_filtrada': lts_filtrada})
+    def get(self, request, *args, **kwargs):
+        consulta = self.request.GET.get('buscar')
+        global lts_filtrada
+        lts_filtrada = Asignacion.objects.filter(
+            Q(nombre_activo__nombre__icontains=consulta) | Q(persona_responsable__icontains=consulta) | Q(nombre_activo__categoria__nombre__icontains=consulta)
+            | Q(sede_asignada__nombre__icontains=consulta) | Q(ambiente_asignado__nombre__icontains=consulta)
+        )
+        return render(request, self.template_name, {'lts_filtrada': lts_filtrada})
 
 @login_required(login_url="login")
 @permission_required('cetaf.view_consulta', raise_exception=True)
@@ -1090,22 +1094,19 @@ def exportar_asignacion(request):
 #
 # Login
 #
-def iniciar_sesion(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.info(request, 'Error en credenciales')
-            return redirect('login')
-    form = AuthenticationForm()
-    return render(request, 'auth/login.html', {'form': form})
+class iniciar_sesion(LoginView):
+    template_name = 'auth/login.html'
 
 
-def cerrar_sesion(request):
-    logout(request)
-    messages.info(request, 'Saliendo del sistema')
-    return redirect('login/')
+
+class cerrar_sesion(LogoutView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_site = get_current_site(self.request)
+        context.update({
+            'site': current_site,
+            'site_name': current_site.name,
+            'title': ('Saliendo del sistema'),
+            **(self.extra_context or {})
+        })
+        return context
