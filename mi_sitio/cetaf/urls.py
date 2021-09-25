@@ -58,4 +58,5 @@ urlpatterns = [
     path('logout', cerrar_sesion.as_view(), name='logout'),
 
     path('historial/', historial.as_view(), name='historial'),
+    path('ayuda/1', views.manual_operaciones, name='manual_operaciones'),
 ]

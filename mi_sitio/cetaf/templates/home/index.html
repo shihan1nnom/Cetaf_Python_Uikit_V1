@@ -124,6 +124,15 @@
             <div class="uk-width-expand@m">
                 <div class="uk-card uk-card-default uk-card-body contenido-central">
                     {% block contenido %}
+                        {% if messages %}
+                            <div style="background: black; height: 70px; border-radius: 30px 10px;">
+                                <ul class="messages" style="padding-top: 25px">
+                                    {% for message in messages %}
+                                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: white">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
                         <img class="uk-align-center uk-responsive-width" src="{% static 'contenido/imagenes/logo_6.png' %}" alt="avatar" width="900px">
                     {% endblock %}
                 </div>

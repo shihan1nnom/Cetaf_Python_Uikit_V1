@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cetaf.apps.CetafConfig',
-    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

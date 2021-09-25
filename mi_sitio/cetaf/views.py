@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect, FileResponse
 from .models import Sede, Ambiente, Categoria, Activo, Asignacion
 from django.contrib.auth.models import User, Group
 from django.contrib.admin.models import *
@@ -20,6 +20,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views import View
 from django.urls import reverse_lazy
 import csv
+import os
 from django.contrib.sites.shortcuts import get_current_site
 
 
@@ -1089,6 +1090,11 @@ def exportar_asignacion(request):
         escribir.writerow(asignacion)
 
     return response
+
+
+def manual_operaciones(request):
+    pdf_operaciones = os.path.join('static/', 'contenido/pdf/Manual_Operaciones.pdf')
+    return FileResponse(open(pdf_operaciones, 'rb'), content_type="application/pdf")
 
 
 #
