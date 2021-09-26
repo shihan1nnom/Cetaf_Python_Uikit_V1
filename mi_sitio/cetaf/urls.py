@@ -59,4 +59,5 @@ urlpatterns = [
 
     path('historial/', historial.as_view(), name='historial'),
     path('ayuda/1', views.manual_operaciones, name='manual_operaciones'),
+    path('ayuda/2', views.manual_usuario, name='manual_usuario'),
 ]

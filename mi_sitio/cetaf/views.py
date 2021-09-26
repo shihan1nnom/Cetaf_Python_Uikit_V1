@@ -1096,6 +1096,10 @@ def manual_operaciones(request):
     pdf_operaciones = os.path.join('static/', 'contenido/pdf/Manual_Operaciones.pdf')
     return FileResponse(open(pdf_operaciones, 'rb'), content_type="application/pdf")
 
+def manual_usuario(request):
+    pdf_usuario = os.path.join('static/', 'contenido/pdf/Manual_Usuario.pdf')
+    return FileResponse(open(pdf_usuario, 'rb'), content_type="application/pdf")
+
 
 #
 # Login
